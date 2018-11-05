@@ -1,4 +1,6 @@
 class Admin::UsersController < ApplicationController
+    before_action :authenticate_user!
+    before_action :admin_check
 
     #GET /admin/users
     def index
@@ -10,4 +12,8 @@ class Admin::UsersController < ApplicationController
         @user = User.find(params[:id])
     end
 
+    private
+    def admin_check
+        return redirect_to users_tweets_timeline_path, :notice => "unauthorized access is prohibited." unless current_user.admin_check
+    end
 end

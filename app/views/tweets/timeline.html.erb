@@ -1,3 +1,4 @@
 <h1>Timeline</h1>
 <p>no touch</p>
+<%= link_to "mypage", user_path(current_user.id) %><br/>
 <%= link_to "log out", destroy_user_session_path, method: :delete %>

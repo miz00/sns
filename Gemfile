@@ -63,3 +63,16 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # Install devise
 gem 'devise'
+
+# Install Better Errors
+group :development do
+  gem 'better_errors'
+  gem 'binding_of_caller'
+end
+
+# Instrall Pry
+group :development, :test do
+  gem 'pry-rails'
+  gem 'pry-byebug'
+  gem 'pry-doc'
+end

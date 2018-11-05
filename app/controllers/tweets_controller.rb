@@ -1,5 +1,6 @@
 class TweetsController < ApplicationController
-    
+    before_action :authenticate_user!, only: [:timeline, :new, :create]
+
     #GET /users/1/tweets
     def index
 
@@ -27,7 +28,7 @@ class TweetsController < ApplicationController
 
     #GET /users/1/tweets/timeline
     def timeline
-
+        
     end
 
 end

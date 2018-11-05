@@ -1,0 +1,21 @@
+<h1>User home</h1>
+<% if current_user.admin_check %>
+  <%= link_to "admin pageへ戻る", admin_users_path %>
+<% end %>
+<div>
+  <h2><%= @user.name %></h2>
+  <p>user.photoあとで挿入</p>
+  <%= link_to "new post", user_tweets_path(@user.id) %>
+  <ul>
+    <% @tweets.each do |t| %>
+      <li>
+        <%= t.text %>
+        <% if t.photo %>
+          <% t.photo.each do |tp| %>
+            <li><%= tp %></li>
+          <% end %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</div>
