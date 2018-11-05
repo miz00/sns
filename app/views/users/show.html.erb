@@ -5,7 +5,8 @@
 <div>
   <h2><%= @user.name %></h2>
   <p>user.photoあとで挿入</p>
-  <%= link_to "new post", user_tweets_path(@user.id) %>
+  <%= link_to "new post", user_tweets_path(@user.id) %><br/>
+  <%= link_to "log out", destroy_user_session_path, method: :delete %>
   <ul>
     <% @tweets.each do |t| %>
       <li>
