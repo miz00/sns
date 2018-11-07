@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   resources :users do
     resources :follows, only: [:create, :destroy]
-    resources :tweets, except: [:edit, :update] do
+    resources :tweets, only: [:create, :new, :destroy] do
       resources :fav, only: [:create, :destroy]
       resources :replies, only: [:show, :new, :create, :destroy]
       resources :images, only: [:create]

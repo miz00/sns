@@ -2,3 +2,24 @@
 <p>no touch</p>
 <%= link_to "mypage", user_path(current_user.id) %><br/>
 <%= link_to "log out", destroy_user_session_path, method: :delete %>
+<ul>
+  <% @tweets.each do |t| %>
+    <li>
+      <%= @users[t.user_id].name %><br/>
+      <%= t.text %><br/>
+      <% #t.photo %>
+      <%= link_to "reply", new_user_tweet_reply_path(t.user_id,t) %>
+      <% if t.user_id == current_user.id %>
+        <%= link_to "x", user_tweet_path(t.user_id,t), method: :delete, data: {confirm: "Are you sure?"} %>
+      <% end %>
+      <%# replyがある場合以下表示 %>
+      <%= if @replies[target_tweet_id: t.id] %>
+        <li>
+          <% @tweets[@replies(target_tweet_id: t.id).tweet_id].each do |r| %>
+            <%= r.text %>
+          <% end %>
+        </li>
+      <% end %>
+    </li>
+  <% end %>
+</ul>
