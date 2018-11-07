@@ -35,8 +35,9 @@ class TweetsController < ApplicationController
 
     #GET /users//tweets/timeline
     def timeline
-        @tweet = Tweet.all
-        @user = User.all
+        @tweets = Tweet.all
+        @users = User.all
+        @replies = Reply.all
     end
 
     private
