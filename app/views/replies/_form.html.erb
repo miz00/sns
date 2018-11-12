@@ -1,4 +1,4 @@
-<%= form_with(model: [users,tweets], url: user_tweets_path, local: true) do |form| %>
+<%= form_with(model: [users,tweets], url: user_tweet_replies_path, local: true) do |form| %>
   <% if tweets.errors.any? %>
     <div>
       <h2><%= pluralize(tweets.errors.count, "error" ) %>prohibited this tweet from being saved:</h2>

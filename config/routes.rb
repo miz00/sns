@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   resources :users do
     resources :follows, only: [:create, :destroy]
     resources :tweets, only: [:create, :new, :destroy] do
-      resources :fav, only: [:create, :destroy]
+      resources :favs, only: [:create, :destroy]
       resources :replies, only: [:show, :new, :create, :destroy]
       resources :images, only: [:create]
     end
