@@ -1,3 +1,4 @@
+<%= "現在のuser確認用: #{current_user.name}"%>
 <h1>Timeline</h1>
 <%= link_to "mypage", user_path(current_user.id) %><br/>
 <%= link_to "log out", destroy_user_session_path, method: :delete %>
@@ -5,36 +6,38 @@
   <% @tweets.each do |t| %>
     <% if Reply.where(tweet_id: t.id).present? then next end %>
     <li>
-      <% @users.each do |u| %>
-        <% if u.id == t.user_id %>
-          <%= u.name %>
-        <% end %>
-      <% end %>
-      <br/>
+      <%= link_to "#{t.user.name}", user_path(t.user.id) %>  :<%= t.created_at %><br/>
       <%= t.text %><br/>
       <% #t.photo %>
-      <%= link_to "reply", new_user_tweet_reply_path(current_user.id,t) %>
-      <%= link_to "like", user_tweet_favs_path(current_user.id,t), method: :post %>
-      <%= link_to "like解除", user_tweet_favs_path(current_user.id,t), method: :delete %>
+      <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t) %>
+      <%= "♡#{ Fav.where(tweet_id: t.id).count }" %>
+      <% f = Fav.find_by(tweet_id: t.id, user_id: current_user.id) %>
+      <% if !f %>
+        <%= link_to "like", user_tweet_favs_path(current_user.id, t), method: :post %>
+      <% else %>
+        <%= link_to "like解除", user_tweet_fav_path(current_user.id, t, f), method: :delete %>
+      <% end %>
       <% if t.user_id == current_user.id %>
-        <%= link_to "x", user_tweet_path(t.user_id,t), method: :delete, data: {confirm: "Are you sure?"} %>
+        <%= link_to "x", user_tweet_path(t.user_id, t), method: :delete, data: {confirm: "Are you sure?"} %>
       <% end %>
       <%# replyがある場合replyを表示する %>
       <ul>
         <% @replies.each do |r| %>
           <% if r.target_tweet_id == t.id %>
-            <% @tweets.each do |tr| %>
-              <% if r.tweet_id == tr.id %>
-                <li>
-                  <% @users.each do |ur| %>
-                    <% if ur.id == tr.user_id %>
-                      <%= ur.name %><br/>
-                    <% end %>
-                  <% end %>
-                  <%= tr.text %>
-                </li>
+            <li>
+              <%= r.tweet.user.name %>  :<%= r.tweet.created_at %><br/>
+              <%= r.tweet.text %><br/>
+              <%= "♡#{ Fav.where(tweet_id: r.tweet.id).count }" %>
+              <% f = Fav.find_by(tweet_id: r.tweet.id, user_id: current_user.id) %>
+              <% if !f %>
+                <%= link_to "like", user_tweet_favs_path(current_user.id, r.tweet.id), method: :post %>
+              <% else %>
+                <%= link_to "like解除", user_tweet_fav_path(current_user.id, r.tweet.id, f), method: :delete %>
               <% end %>
-            <% end %>
+              <% if r.tweet.user_id == current_user.id %>
+                <%= link_to "x", user_tweet_reply_path(current_user.id, t, r), method: :delete, data: {confirm: "Are you sure?"} %>
+              <% end %>
+            </li>
           <% end %>
         <% end %>
       </ul>

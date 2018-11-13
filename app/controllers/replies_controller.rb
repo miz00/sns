@@ -15,6 +15,13 @@ class RepliesController < ApplicationController
         end
     end
 
+    # DELETE /users/:user_id/tweets/:tweet_id/replies/:id
+    def destroy
+        @tweet = Tweet.find(params[:tweet_id])
+        @tweet.destroy
+        redirect_to users_tweets_timeline_path
+    end
+
     private
     def tweet_params
         params.require(:tweet).permit(:text, :privacy_status).merge(user_id: params[:user_id]) 

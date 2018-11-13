@@ -35,6 +35,7 @@ class TweetsController < ApplicationController
 
     #GET /users//tweets/timeline
     def timeline
+        @follows = Follow.where(user_id: current_user.id)
         @tweets = Tweet.all
         @users = User.all
         @replies = Reply.all
