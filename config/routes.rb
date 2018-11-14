@@ -4,6 +4,8 @@ Rails.application.routes.draw do
     :sessions => 'users/sessions'
   }
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  get 'users/search', to: 'users#search'
+  
   resources :users do
     resources :follows, only: [:create, :destroy]
     resources :tweets, only: [:create, :new, :destroy] do

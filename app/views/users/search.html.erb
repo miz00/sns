@@ -1,0 +1,5 @@
+<h1>User検索</h1>
+<%= form_tag(users_search_path, :method => 'get') do %>
+  <%= text_field_tag :serch %>
+  <%= submit_tag 'Search', :name => nil %>
+<% end %>

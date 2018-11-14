@@ -30,13 +30,15 @@ class TweetsController < ApplicationController
     def destroy
         @tweet = Tweet.find(params[:id])
         @tweet.destroy
-        redirect_to user_path(current_user), notice: "tweet was successfully deleted."
+        redirect_to users_tweets_timeline_path, notice: "tweet was successfully deleted."
     end
 
     #GET /users//tweets/timeline
     def timeline
-        @follows = Follow.where(user_id: current_user.id)
-        @tweets = Tweet.all
+        follows = Follow.where(user_id: current_user.id)
+        follower_user_ids = follows.pluck(:target_user_id)
+        follower_user_ids.push(current_user.id)
+        @tweets = Tweet.where(user_id: follower_user_ids)
         @users = User.all
         @replies = Reply.all
     end
