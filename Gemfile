@@ -76,3 +76,6 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-doc'
 end
+
+# Install Shrine
+gem "shrine", github: 'janko-m/shrine'

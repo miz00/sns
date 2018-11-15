@@ -1,0 +1,59 @@
+<li>
+    <%= link_to "#{t.user.name}", user_path(t.user.id) %>  :<%= t.created_at %><br/>
+    <%= t.text %><br/>
+    <% #t.photo %>
+    <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t) %>
+    <%= "♡#{ Fav.where(tweet_id: t.id).count }" %>
+    <% f = Fav.find_by(tweet_id: t.id, user_id: current_user.id) %>
+    <% if !f %>
+        <%= link_to "like", user_tweet_favs_path(current_user.id, t), method: :post %>
+    <% else %>
+        <%= link_to "like解除", user_tweet_fav_path(current_user.id, t, f), method: :delete %>
+    <% end %>
+    <% if t.user_id == current_user.id %>
+        <%= link_to "x", user_tweet_path(t.user_id, t), method: :delete, data: {confirm: "Are you sure?"} %>
+    <% end %>
+<%# replyがある場合replyを表示する %>
+    <ul>
+        <% replies.each do |r| %>
+            <% if r.target_tweet_id == t.id %>
+                <%# reply.tweet.user_idがcurrent_userの時公開範囲関係なし %>
+                <% if  current_user.id == r.tweet.user_id %>
+                    <li>
+                        <%= r.tweet.user.name %>  :<%= r.tweet.created_at %><br/>
+                        <%= r.tweet.text %><br/>
+                        <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t) %>
+                        <%= "♡#{ Fav.where(tweet_id: r.tweet.id).count }" %>
+                        <% f = Fav.find_by(tweet_id: r.tweet.id, user_id: current_user.id) %>
+                        <% if !f %>
+                            <%= link_to "like", user_tweet_favs_path(current_user.id, r.tweet.id), method: :post %>
+                        <% else %>
+                            <%= link_to "like解除", user_tweet_fav_path(current_user.id, r.tweet.id, f), method: :delete %>
+                        <% end %>
+                        <% if r.tweet.user_id == current_user.id %>
+                            <%= link_to "x", user_tweet_reply_path(current_user.id, t, r), method: :delete, data: {confirm: "Are you sure?"} %>
+                        <% end %>
+                    </li>
+                <% else %>
+                    <%# current_userとr.tweet.user_idが異なる時、privacy_status:3のものは非表示 %>
+                    <% if r.tweet.privacy_status == 3 then next end %>
+                    <li>
+                        <%= r.tweet.user.name %>  :<%= r.tweet.created_at %><br/>
+                        <%= r.tweet.text %><br/>
+                        <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t) %>
+                        <%= "♡#{ Fav.where(tweet_id: r.tweet.id).count }" %>
+                        <% f = Fav.find_by(tweet_id: r.tweet.id, user_id: current_user.id) %>
+                        <% if !f %>
+                            <%= link_to "like", user_tweet_favs_path(current_user.id, r.tweet.id), method: :post %>
+                        <% else %>
+                            <%= link_to "like解除", user_tweet_fav_path(current_user.id, r.tweet.id, f), method: :delete %>
+                        <% end %>
+                        <% if r.tweet.user_id == current_user.id %>
+                            <%= link_to "x", user_tweet_reply_path(current_user.id, t, r), method: :delete, data: {confirm: "Are you sure?"} %>
+                        <% end %>
+                    </li>
+                <% end %>
+            <% end %>
+        <% end %>
+    </ul>
+</li>

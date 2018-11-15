@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_05_072211) do
+ActiveRecord::Schema.define(version: 2018_11_15_080237) do
 
   create_table "favs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(version: 2018_11_05_072211) do
     t.bigint "tweet_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "image_data", null: false
     t.index ["tweet_id"], name: "index_images_on_tweet_id"
   end
 
@@ -49,7 +50,7 @@ ActiveRecord::Schema.define(version: 2018_11_05_072211) do
   create_table "tweets", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "text", null: false
     t.bigint "user_id", null: false
-    t.integer "privacy_status", null: false
+    t.integer "privacy_status", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_tweets_on_user_id"

@@ -1,31 +1,69 @@
-<h1>User home</h1>
-<% if current_user.admin_check %>
-  <%= link_to "admin pageへ戻る", admin_users_path %>
-<% end %>
-<div>
-  <h2><%= @user.name %></h2>
-  <p>user.photoあとで挿入</p>
-  <h3>
-    <% if current_user.id != @user.id %>
-      <% f = Follow.find_by(user_id: current_user.id, target_user_id: params[:id]) %>
-      <% if !f %>
-        <%= link_to "Follow", user_follows_path(@user), method: :post %>
-      <% else %>
-        <%= link_to "Unfollow", user_follow_path(@user, f.id), method: :delete, data: {confirm: "Are you sure?"} %>
+<% if !user_signed_in? %>
+  <div>
+    <h2><%= @user.name %></h2>
+    <p>user.photoあとで挿入</p>
+    <%= link_to "timelineへ", users_tweets_timeline_path, data: {confirm: "please login!"} %>
+    <%= link_to "log in", user_session_path, method: :post %>
+    <ul>
+      <% @tweets.each do |t| %>
+        <li>
+          <% if @replies.pluck(:tweet_id).include?(t.id) %>
+            <strong><%= "-- replied to "%>
+            <%= Tweet.find(@replies.find_by(tweet_id: t.id).target_tweet_id).user.name %></strong><br/>
+          <% end %>
+          <%= t.created_at %><br/>
+          <%= t.text %><br/>
+          <% #t.photo %>
+          <%= "♡#{ Fav.where(tweet_id: t.id).count }" %>
+        </li>
       <% end %>
-    <% end %>
-  </h3>
-  <%= link_to "new post", new_user_tweet_path(current_user.id) %><br/>
-  <%= link_to "timelineへ", users_tweets_timeline_path %>
-  <%= link_to "log out", destroy_user_session_path, method: :delete %>
-  <ul>
-    <% @tweets.each do |t| %>
-      <li>
-        <%= t.text %>
-        <% if current_user.id == t.user.id %>
-          <%= link_to "x", user_tweet_path(@user,t), method: :delete, data: {confirm: "Are you sure?"} %>
+    </ul>
+  </div>
+<% else %>
+  <%= "現在のuser確認用: #{current_user.name}"%>
+  <h1>User home</h1>
+  <% if current_user.admin_check %>
+    <%= link_to "admin pageへ戻る", admin_users_path %>
+  <% end %>
+  <div>
+    <h2><%= @user.name %></h2>
+    <p>user.photoあとで挿入</p>
+    <h3>
+      <% if current_user.id != @user.id %>
+        <% f = Follow.find_by(user_id: current_user.id, target_user_id: params[:id]) %>
+        <% if !f %>
+          <%= link_to "Follow", user_follows_path(@user), method: :post %>
+        <% else %>
+          <%= link_to "Unfollow", user_follow_path(@user, f.id), method: :delete, data: {confirm: "Are you sure?"} %>
         <% end %>
-      </li>
-    <% end %>
-  </ul>
-</div>
+      <% end %>
+    </h3>
+    <%= link_to "new post", new_user_tweet_path(current_user.id) %><br/>
+    <%= link_to "timelineへ", users_tweets_timeline_path %>
+    <%= link_to "log out", destroy_user_session_path, method: :delete %>
+    <ul>
+      <% @tweets.each do |t| %>
+        <li>
+          <% if @replies.pluck(:tweet_id).include?(t.id) %>
+            <strong><%= "-- replied to "%>
+            <%= Tweet.find(@replies.find_by(tweet_id: t.id).target_tweet_id).user.name %></strong><br/>
+          <% end %>
+          <%= t.created_at %><br/>
+          <%= t.text %><br/>
+          <% #t.photo %>
+          <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t) %>
+          <%= "♡#{ Fav.where(tweet_id: t.id).count }" %>
+          <% f = Fav.find_by(tweet_id: t.id, user_id: current_user.id) %>
+          <% if !f %>
+              <%= link_to "like", user_tweet_favs_path(current_user.id, t), method: :post %>
+          <% else %>
+              <%= link_to "like解除", user_tweet_fav_path(current_user.id, t, f), method: :delete %>
+          <% end %>
+          <% if t.user_id == current_user.id %>
+              <%= link_to "x", user_tweet_path(@user, t), method: :delete, data: {confirm: "Are you sure?"} %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

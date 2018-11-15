@@ -17,7 +17,12 @@
 
   <div class = "field">
     <%= form.label :privacy_status %>
-    <%= form.select :privacy_status, [["全体に公開",1],["フォロワーのみに公開",2],["自分のみに公開",3]] %>
+    <%= form.select :privacy_status, [["全体に公開",'everyone'],["フォロワーのみに公開",'followers'],["自分のみに公開",'me']] %>
+  </div>
+  
+  <div class = "field">
+    <%= form.label :image %>
+    <%= form.file_field :image, :multiple => true %>
   </div>
 
   <div>

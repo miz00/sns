@@ -20,6 +20,7 @@ class TweetsController < ApplicationController
         @tweets = Tweet.new
         @users = current_user
         @path = Rails.application.routes.recognize_path(request.referer)
+        @images = Image.new(tweet_id: @tweet)
     end
 
     #GET /users/1/tweets/:id
@@ -45,7 +46,7 @@ class TweetsController < ApplicationController
 
     private
     def tweet_params
-        params.require(:tweet).permit(:text, :privacy_status).merge(user_id: params[:user_id]) 
+        params.require(:tweet).permit(:text, :image, :privacy_status).merge(user_id: params[:user_id]) 
     end
 
 end

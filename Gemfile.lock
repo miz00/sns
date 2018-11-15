@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/janko-m/shrine.git
+  revision: 203c2c9a0c83815c9ded1b09d5d006b2a523579c
+  specs:
+    shrine (2.13.0)
+      down (~> 4.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -89,6 +96,8 @@ GEM
       railties (>= 4.1.0, < 6.0)
       responders
       warden (~> 1.2.3)
+    down (4.6.1)
+      addressable (~> 2.5)
     erubi (1.7.1)
     execjs (2.7.0)
     ffi (1.9.25)
@@ -245,6 +254,7 @@ DEPENDENCIES
   rails (~> 5.2.1)
   sass-rails (~> 5.0)
   selenium-webdriver
+  shrine!
   spring
   spring-watcher-listen (~> 2.0.0)
   turbolinks (~> 5)

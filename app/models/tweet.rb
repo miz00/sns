@@ -6,4 +6,6 @@ class Tweet < ApplicationRecord
   has_many :favs, dependent: :destroy
 
   validates :text, presence: true
+  
+  enum privacy_status: { everyone: 1, followers: 2, me: 3 }
 end

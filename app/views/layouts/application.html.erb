@@ -12,6 +12,9 @@
   <body>
     <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>
+    <% if !user_signed_in? %>
+      <p>currently you are not logged in!</p>
+    <% end %>
 
     <%= yield %>
   </body>
