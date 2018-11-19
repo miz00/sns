@@ -7,8 +7,11 @@ class TweetsController < ApplicationController
 
     #POST /users/1/tweets
     def create
-        @tweet = Tweet.new(tweet_params)
-        if @tweet.save
+        @tweet = Tweet.create(tweet_params)
+        if image_params1 then @image = Image.create(image: image_params1[:image1], tweet_id: image_params1[:tweet_id]) end
+        if image_params2 then @image = Image.create(image: image_params2[:image2], tweet_id: image_params2[:tweet_id]) end
+        if image_params3 then @image = Image.create(image: image_params3[:image3], tweet_id: image_params3[:tweet_id]) end
+        if @tweet
             redirect_to user_path(current_user), notice: "tweet was successfully created."
         else
             redirect_to new_user_tweet_path(current_user), notice: "tweet was not created."
@@ -20,7 +23,6 @@ class TweetsController < ApplicationController
         @tweets = Tweet.new
         @users = current_user
         @path = Rails.application.routes.recognize_path(request.referer)
-        @images = Image.new(tweet_id: @tweet)
     end
 
     #GET /users/1/tweets/:id
@@ -46,7 +48,19 @@ class TweetsController < ApplicationController
 
     private
     def tweet_params
-        params.require(:tweet).permit(:text, :image, :privacy_status).merge(user_id: params[:user_id]) 
+        params.require(:tweet).permit(:text, :privacy_status).merge(user_id: params[:user_id]) 
+    end
+
+    def image_params1
+        params.require(:tweet).permit(:image1).merge(tweet_id: @tweet.id)
+    end
+
+    def image_params2
+        params.require(:tweet).permit(:image2).merge(tweet_id: @tweet.id)
+    end
+
+    def image_params3
+        params.require(:tweet).permit(:image3).merge(tweet_id: @tweet.id)
     end
 
 end

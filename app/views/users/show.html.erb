@@ -50,7 +50,10 @@
           <% end %>
           <%= t.created_at %><br/>
           <%= t.text %><br/>
-          <% #t.photo %>
+          <% images = Image.where(tweet_id: t.id) %>
+          <% images.each do |image| %>
+            <%= image_tag image.image_url, :size => '200x200' %><br/>
+          <% end %>
           <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t) %>
           <%= "♡#{ Fav.where(tweet_id: t.id).count }" %>
           <% f = Fav.find_by(tweet_id: t.id, user_id: current_user.id) %>
