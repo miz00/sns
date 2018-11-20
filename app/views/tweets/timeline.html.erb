@@ -7,12 +7,12 @@
   <% @tweets.each do |t| %>
     <% if current_user.id == t.user_id %>
       <%# 公開範囲に関係なく全てのツイートを取ってくる %>
-      <% if Reply.where(tweet_id: t.id).present? then next end %>
+      <% if Tweet.is_reply?(t.id) then next end %>
       <%= render partial: "timeline", locals: {t: t, replies: @replies}%>
     <% else %>
       <%# praivacy_status=3[自分のみに公開]のtを表示しない>>t.privacy_status[3]の時skipさせる %>
       <% if t.privacy_status == 3 then next end %>
-      <% if Reply.where(tweet_id: t.id).present? then next end %>
+      <% if Tweet.is_reply?(t.id) then next end %>
       <%= render partial: "timeline", locals: {t: t, replies: @replies}%>
     <% end %>
   <% end %>

@@ -7,17 +7,16 @@
     <ul>
       <% @tweets.each do |t| %>
         <li>
-          <% if @replies.pluck(:tweet_id).include?(t.id) %>
+          <% if Tweet.is_reply?(t.id) %>
             <strong><%= "-- replied to "%>
             <%= Tweet.find(@replies.find_by(tweet_id: t.id).target_tweet_id).user.name %></strong><br/>
           <% end %>
           <%= t.created_at %><br/>
           <%= t.text %><br/>
-          <% images = Image.where(tweet_id: t.id) %>
-          <% images.each do |image| %>
+          <% t.images.each do |image| %>
             <%= image_tag image.image_url, :size => '200x200' %>
           <% end %><br/>
-          <%= "♡#{ Fav.where(tweet_id: t.id).count }" %>
+          <%= "♡#{ t.favs.count }" %>
         </li>
       <% end %>
     </ul>
@@ -49,16 +48,16 @@
         <li>
           <% if @replies.pluck(:tweet_id).include?(t.id) %>
             <strong><%= "-- replied to "%>
+            <%= t.replied_target_tweet.user.name %>
             <%= Tweet.find(@replies.find_by(tweet_id: t.id).target_tweet_id).user.name %></strong><br/>
           <% end %>
           <%= t.created_at %><br/>
           <%= t.text %><br/>
-          <% images = Image.where(tweet_id: t.id) %>
-          <% images.each do |image| %>
+          <% t.images.each do |image| %>
             <%= image_tag image.image_url, :size => '200x200' %>
           <% end %><br/>
           <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t) %>
-          <%= "♡#{ Fav.where(tweet_id: t.id).count }" %>
+          <%= "♡#{ t.favs.count }" %>
           <% f = Fav.find_by(tweet_id: t.id, user_id: current_user.id) %>
           <% if !f %>
               <%= link_to "like", user_tweet_favs_path(current_user.id, t), method: :post %>
