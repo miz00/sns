@@ -3,6 +3,8 @@ class UsersController < ApplicationController
     #GET /users/serach
     def search
         @users = User.search(params[:search])
+        pp(params[:search])
+        pp(@users)
     end
     
     #GET /users/:id

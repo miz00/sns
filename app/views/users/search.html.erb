@@ -5,14 +5,16 @@
 <% end %>
 <h1>User検索</h1>
 <%= form_tag(users_search_path, :method => 'get') do %>
-  <%= text_field_tag :serch %>
+  <%= text_field_tag :search, @user, placeholder: "User name" %>
   <%= submit_tag 'Search', :name => nil %>
 <% end %>
 
 <ul>
-  <% @users.each do |u| %>
-    <li>
-      <%= link_to u.name, user_path(u.id)%>
-    </li>
+  <% if params[:search] && params[:search] != "" %>
+    <% @users.each do |u| %>
+      <li>
+        <%= link_to u.name, user_path(u.id)%>
+      </li>
+    <% end %>
   <% end %>
 </ul>
