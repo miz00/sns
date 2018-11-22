@@ -13,8 +13,10 @@
       <% @tweets.order(created_at: :desc).each do |t| %>
         <li>
           <% if Tweet.is_reply?(t.id) %>
-            <strong><%= "-- replied to "%>
-            <%= Tweet.find(@replies.find_by(tweet_id: t.id).target_tweet_id).user.name %></strong><br/>
+            <strong>
+              <%= "-- replied to "%>
+              <%= t.my_reply.target_tweet.user.name %>
+            </strong><br/>
           <% end %>
           <%= t.created_at %><br/>
           <%= t.text %><br/>
@@ -60,8 +62,10 @@
       <% @tweets.order(created_at: :desc).each do |t| %>
         <li>
           <% if @replies.pluck(:tweet_id).include?(t.id) %>
-            <strong><%= "-- replied to "%>
-            <%= Tweet.find(@replies.find_by(tweet_id: t.id).target_tweet_id).user.name %></strong><br/>
+            <strong>
+              <%= "-- replied to "%>
+              <%= t.my_reply.target_tweet.user.name %>
+            </strong><br/>
           <% end %>
           <%= t.created_at %><br/>
           <%= t.text %><br/>

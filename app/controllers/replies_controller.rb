@@ -6,8 +6,8 @@ class RepliesController < ApplicationController
     end
 
     def create
-        @tweet = Tweet.new(tweet_params)
-        if @tweet.save
+        @tweet = Tweet.create(tweet_params)
+        if @tweet
             Reply.create(tweet_id: @tweet.id, target_tweet_id: params[:tweet_id])
             redirect_to users_tweets_timeline_path, notice: "tweet was successfully created."
         else
