@@ -5,7 +5,6 @@ class Tweet < ApplicationRecord
   has_one :my_reply, class_name: 'Reply', :foreign_key => 'tweet_id', :primary_key => 'id'
   has_many :replies, foreign_key: 'target_tweet_id', dependent: :destroy
   has_many :favs, dependent: :destroy
-  #has_one :replied_target_tweet, through: :replies, source: :target_tweet
   has_one :replied_target_tweet, class_name: 'Reply', :foreign_key => 'target_tweet_id'
 
   validates :text, presence: true

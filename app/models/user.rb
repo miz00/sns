@@ -7,6 +7,8 @@ class User < ApplicationRecord
   has_many :tweets, dependent: :destroy
   has_many :favx, dependent: :destroy
 
+  include ImageUploader[:image]
+
   def self.search(search)
       if search && search != ""
           where(['name LIKE ?',"%#{search}%"])
