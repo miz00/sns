@@ -7,7 +7,7 @@ class TweetsController < ApplicationController
 
     #POST /users/1/tweets
     def create
-        @tweet = Tweet.create(tweet_params)
+        @tweet = Tweet.create(tweet_params).order(created_at: :desc)
         if image_params1 then @image = Image.create(image: image_params1[:image1], tweet_id: image_params1[:tweet_id]) end
         if image_params2 then @image = Image.create(image: image_params2[:image2], tweet_id: image_params2[:tweet_id]) end
         if image_params3 then @image = Image.create(image: image_params3[:image3], tweet_id: image_params3[:tweet_id]) end
@@ -41,7 +41,7 @@ class TweetsController < ApplicationController
         follows = Follow.where(user_id: current_user.id)
         follower_user_ids = follows.pluck(:target_user_id)
         follower_user_ids.push(current_user.id)
-        @tweets = Tweet.where(user_id: follower_user_ids)
+        @tweets = Tweet.where(user_id: follower_user_ids).order(created_at: :desc)
         @users = User.all
         @replies = Reply.all
     end

@@ -5,7 +5,7 @@
     <%= link_to "timelineへ", users_tweets_timeline_path, data: {confirm: "please login!"} %>
     <%= link_to "log in", user_session_path, method: :post %>
     <ul>
-      <% @tweets.each do |t| %>
+      <% @tweets.order(created_at: :desc).each do |t| %>
         <li>
           <% if Tweet.is_reply?(t.id) %>
             <strong><%= "-- replied to "%>
@@ -44,11 +44,10 @@
     <%= link_to "timelineへ", users_tweets_timeline_path %>
     <%= link_to "log out", destroy_user_session_path, method: :delete %>
     <ul>
-      <% @tweets.each do |t| %>
+      <% @tweets.order(created_at: :desc).each do |t| %>
         <li>
           <% if @replies.pluck(:tweet_id).include?(t.id) %>
             <strong><%= "-- replied to "%>
-            <%= t.replied_target_tweet.user.name %>
             <%= Tweet.find(@replies.find_by(tweet_id: t.id).target_tweet_id).user.name %></strong><br/>
           <% end %>
           <%= t.created_at %><br/>
