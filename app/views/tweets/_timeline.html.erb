@@ -21,7 +21,7 @@
                 <%# reply.tweet.user_idがcurrent_userの時公開範囲関係なし %>
                 <% if  current_user.id == r.tweet.user_id %>
                     <li>
-                        <%= r.tweet.user.name %>  :<%= r.tweet.created_at %><br/>
+                        <%= render partial: "icon", locals: {t: r.tweet} %><%= r.tweet.user.name %>  :<%= r.tweet.created_at %><br/>
                         <%= r.tweet.text %><br/>
                         <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t) %>
                         <%= "♡#{ r.tweet.favs.count }" %>
@@ -38,7 +38,7 @@
                     <%# current_userとr.tweet.user_idが異なる時、privacy_status:3のものは非表示 %>
                     <% if r.tweet.privacy_status == "me" then next end %>
                     <li>
-                        <%= r.tweet.user.name %>  :<%= r.tweet.created_at %><br/>
+                        <%= render partial: "icon", locals: {t: r.tweet} %><%= r.tweet.user.name %>  :<%= r.tweet.created_at %><br/>
                         <%= r.tweet.text %><br/>
                         <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t) %>
                         <%= "♡#{ r.tweet.favs.count }" %>

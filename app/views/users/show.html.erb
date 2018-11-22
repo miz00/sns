@@ -1,6 +1,12 @@
 <% if !user_signed_in? %>
   <div>
-    <h2><%= image_tag @user.image_url %><%= @user.name %></h2>
+    <h2>
+      <% if @user.image_data %>
+        <%= image_tag @user.image_url, :size => '50x50' %>
+      <% else %>
+        <%= image_tag '/uploads/store/default_icon.jpg', :size => '50x50' %>
+      <% end %>  <%= @user.name %>
+    </h2>
     <%= link_to "timelineへ", users_tweets_timeline_path, data: {confirm: "please login!"} %>
     <%= link_to "log in", user_session_path, method: :post %>
     <ul>
@@ -27,7 +33,13 @@
     <%= link_to "admin pageへ戻る", admin_users_path %>
   <% end %>
   <div>
-    <h2><%= image_tag @user.image_url, :size => '50x50' %>  <%= @user.name %></h2>
+    <h2>
+      <% if @user.image_data %>
+        <%= image_tag @user.image_url, :size => '50x50' %>
+      <% else %>
+        <%= image_tag '/uploads/store/default_icon.jpg', :size => '50x50' %>
+      <% end %>  <%= @user.name %>
+    </h2>
     <% if current_user.id == params[:id].to_i %>
       <%= link_to "profile編集", edit_user_path(params[:id]) %>
     <% end %>
