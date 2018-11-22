@@ -2,10 +2,9 @@ class Tweet < ApplicationRecord
   belongs_to :user
   has_many :images, dependent: :destroy
   has_many :replies, dependent: :destroy
-  has_one :my_reply, class_name: 'Reply', :foreign_key => 'tweet_id', :primary_key => 'id'
+  has_one :my_reply, class_name: 'Reply', :foreign_key => 'tweet_id', :primary_key => 'id', dependent: :destroy
   has_many :replies, foreign_key: 'target_tweet_id', dependent: :destroy
   has_many :favs, dependent: :destroy
-  has_one :replied_target_tweet, class_name: 'Reply', :foreign_key => 'target_tweet_id'
 
   validates :text, presence: true
   

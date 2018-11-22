@@ -1,67 +1,45 @@
-<% if !user_signed_in? %>
-  <div>
-    <h2>
-      <% if @user.image_data %>
-        <%= image_tag @user.image_url, :size => '50x50' %>
+<h1>User home</h1>
+
+<div>
+  <% if user_signed_in? %>
+      <%#ログイン済みユーザーの場合%>
+      <%= link_to "new post", new_user_tweet_path(current_user.id) %><br/>
+      <%= link_to "timelineへ", users_tweets_timeline_path %>
+      <%= link_to "log out", destroy_user_session_path, method: :delete %>
+      <% if current_user.id == @user.id %>
+        <%= link_to "profile編集", edit_user_path(params[:id]) %>
       <% else %>
-        <%= image_tag '/uploads/store/default_icon.jpg', :size => '50x50' %>
-      <% end %>  <%= @user.name %>
-    </h2>
-    <%= link_to "timelineへ", users_tweets_timeline_path, data: {confirm: "please login!"} %>
-    <%= link_to "log in", user_session_path, method: :post %>
-    <ul>
-      <% @tweets.order(created_at: :desc).each do |t| %>
-        <li>
-          <% if Tweet.is_reply?(t.id) %>
-            <strong>
-              <%= "-- replied to "%>
-              <%= t.my_reply.target_tweet.user.name %>
-            </strong><br/>
-          <% end %>
-          <%= t.created_at %><br/>
-          <%= t.text %><br/>
-          <% t.images.each do |image| %>
-            <%= image_tag image.image_url, :size => '200x200' %>
-          <% end %><br/>
-          <%= "♡#{ t.favs.count }" %>
-        </li>
-      <% end %>
-    </ul>
-  </div>
-<% else %>
-  <%= "現在のuser確認用: #{current_user.name}"%>
-  <h1>User home</h1>
-  <% if current_user.admin_check %>
-    <%= link_to "admin pageへ戻る", admin_users_path %>
-  <% end %>
-  <div>
-    <h2>
-      <% if @user.image_data %>
-        <%= image_tag @user.image_url, :size => '50x50' %>
-      <% else %>
-        <%= image_tag '/uploads/store/default_icon.jpg', :size => '50x50' %>
-      <% end %>  <%= @user.name %>
-    </h2>
-    <% if current_user.id == params[:id].to_i %>
-      <%= link_to "profile編集", edit_user_path(params[:id]) %>
-    <% end %>
-    <h3>
-      <% if current_user.id != @user.id %>
-        <% f = Follow.find_by(user_id: current_user.id, target_user_id: params[:id]) %>
-        <% if !f %>
-          <%= link_to "Follow", user_follows_path(@user), method: :post %>
+        <% if @follow %>
+          <%= link_to "Unfollow", user_follow_path(@user, @follow.id), method: :delete, data: {confirm: "Are you sure?"} %>
         <% else %>
-          <%= link_to "Unfollow", user_follow_path(@user, f.id), method: :delete, data: {confirm: "Are you sure?"} %>
+          <%= link_to "Follow", user_follows_path(@user), method: :post %>
         <% end %>
       <% end %>
-    </h3>
-    <%= link_to "new post", new_user_tweet_path(current_user.id) %><br/>
-    <%= link_to "timelineへ", users_tweets_timeline_path %>
-    <%= link_to "log out", destroy_user_session_path, method: :delete %>
-    <ul>
-      <% @tweets.order(created_at: :desc).each do |t| %>
-        <li>
-          <% if @replies.pluck(:tweet_id).include?(t.id) %>
+      <%#adminユーザーの場合%>
+      <% if current_user.admin_check %>
+        <%= link_to "admin pageへ戻る", admin_users_path %>
+      <% end %>
+  <% else %>
+      <%#非ログインユーザーの場合%>
+      <%= link_to "log in", user_session_path, method: :post %>
+  <% end %>
+</div>
+
+<div>
+  <h2>
+    <% if @user.image_data %>
+      <%= image_tag @user.image_url, :size => '50x50' %>
+    <% else %>
+      <%= image_tag '/uploads/store/default_icon.jpg', :size => '50x50' %>
+    <% end %>  <%= @user.name %>
+  </h2>
+</div>
+
+<div>
+  <ul>
+    <% @tweets.each do |t| %>
+      <li>
+        <% if t.my_reply %>
             <strong>
               <%= "-- replied to "%>
               <%= t.my_reply.target_tweet.user.name %>
@@ -71,20 +49,20 @@
           <%= t.text %><br/>
           <% t.images.each do |image| %>
             <%= image_tag image.image_url, :size => '200x200' %>
-          <% end %><br/>
-          <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t) %>
-          <%= "♡#{ t.favs.count }" %>
-          <% f = Fav.find_by(tweet_id: t.id, user_id: current_user.id) %>
-          <% if !f %>
-              <%= link_to "like", user_tweet_favs_path(current_user.id, t), method: :post %>
+        <% end %><br/>
+        <%= "♡#{ t.favs.count }" %>
+        <% if user_signed_in? %>
+          <% if f = fav(t) %>
+            <%= link_to "like解除", user_tweet_fav_path(current_user.id, t, f), method: :delete %>
           <% else %>
-              <%= link_to "like解除", user_tweet_fav_path(current_user.id, t, f), method: :delete %>
+            <%= link_to "like", user_tweet_favs_path(current_user.id, t), method: :post %>
           <% end %>
           <% if t.user_id == current_user.id %>
-              <%= link_to "x", user_tweet_path(@user, t), method: :delete, data: {confirm: "Are you sure?"} %>
+            <%= link_to "x", user_tweet_path(@user, t), method: :delete, data: {confirm: "Are you sure?"} %>
           <% end %>
-        </li>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
+          <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t) %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</div>

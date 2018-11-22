@@ -11,18 +11,18 @@ class UsersController < ApplicationController
     def show
         @user = User.find(params[:id])
         if !user_signed_in?
-            @tweets = Tweet.where(user_id: @user).everyone
+            @tweets = Tweet.where(user_id: @user).everyone.order(created_at: :desc)
         elsif current_user.id == @user.id
-            @tweets = Tweet.where(user_id: @user)
+            @tweets = Tweet.where(user_id: @user).order(created_at: :desc)
         elsif Follow.where(target_user_id: params[:id], user_id: current_user.id)
-        #elsif !Follow.where(target_user_id: params[:id]).pluck(:user_id).include?(current_user.id)
-            @tweets = Tweet.where(user_id: @user).everyone
+            @tweets = Tweet.where(user_id: @user).everyone.order(created_at: :desc)
         else
-            @tweets = Tweet.where(user_id: @user).everyone.or(Tweet.where(user_id: @user).followers)            
+            @tweets = Tweet.where(user_id: @user).everyone.or(Tweet.where(user_id: @user).followers).order(created_at: :desc)         
         end
         my_tweet_id = @tweets.pluck(:id)
         @replies = Reply.where(tweet_id: my_tweet_id)
         @images = Image.where(tweet_id: my_tweet_id)
+        if user_signed_in? then @follow = Follow.find_by(user_id: current_user.id, target_user_id: params[:id]) end
     end
 
     #GET /users/:id/edit
@@ -39,6 +39,12 @@ class UsersController < ApplicationController
             render :edit
         end
     end
+
+    def fav(tweet)
+        Fav.find_by(tweet_id: tweet.id, user_id: current_user.id)
+    end
+
+    helper_method :fav
 
     private
     def user_params
