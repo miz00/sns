@@ -7,7 +7,7 @@ class TweetsController < ApplicationController
 
     #POST /users/1/tweets
     def create
-        @tweet = Tweet.create(tweet_params).order(created_at: :desc)
+        @tweet = Tweet.create(tweet_params)
         if image_params1 then @image = Image.create(image: image_params1[:image1], tweet_id: image_params1[:tweet_id]) end
         if image_params2 then @image = Image.create(image: image_params2[:image2], tweet_id: image_params2[:tweet_id]) end
         if image_params3 then @image = Image.create(image: image_params3[:image3], tweet_id: image_params3[:tweet_id]) end
@@ -42,6 +42,7 @@ class TweetsController < ApplicationController
         follower_user_ids = follows.pluck(:target_user_id)
         follower_user_ids.push(current_user.id)
         @tweets = Tweet.where(user_id: follower_user_ids).order(created_at: :desc)
+        @tweets = Tweet.except_reply_tweets(@tweets)
         @users = User.all
         @replies = Reply.all
     end
@@ -52,15 +53,21 @@ class TweetsController < ApplicationController
     end
 
     def image_params1
-        params.require(:tweet).permit(:image1).merge(tweet_id: @tweet.id)
+        if params[:tweet][:image]
+          params.require(:tweet).permit(:image1).merge(tweet_id: @tweet.id)
+        end
     end
 
     def image_params2
-        params.require(:tweet).permit(:image2).merge(tweet_id: @tweet.id)
+        if params[:tweet][:image]
+          params.require(:tweet).permit(:image2).merge(tweet_id: @tweet.id)
+        end
     end
 
     def image_params3
-        params.require(:tweet).permit(:image3).merge(tweet_id: @tweet.id)
+        if params[:tweet][:image]
+          params.require(:tweet).permit(:image3).merge(tweet_id: @tweet.id)
+        end
     end
 
 end

@@ -15,6 +15,25 @@ class Tweet < ApplicationRecord
     Reply.where(tweet_id: tweet_id).present?
   end
 
+  # except_reply_tweets(tweets)
+  def self.except_reply_tweets(tweets)
+    array = []
+    tweets.each do |t|
+      unless Tweet.is_reply?(t.id)
+        array.push(t)
+      end
+    end
+    return array
+  end
+
+  # privacy_status_check(t)
+  def self.privacy_status_check?(tweet,current_user)
+    false
+    if tweet.user_id != current_user.id && tweet.privacy_status == "me"
+      true
+    end
+  end
+
   # has_fav?(t.id,current_user.id)
   def self.has_fav(tweet_id, user_id)
     Fav.find_by(tweet_id: tweet_id, user_id: user_id)
