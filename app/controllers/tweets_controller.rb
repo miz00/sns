@@ -53,19 +53,19 @@ class TweetsController < ApplicationController
     end
 
     def image_params1
-        if params[:tweet][:image]
+        if params[:tweet][:image1]
           params.require(:tweet).permit(:image1).merge(tweet_id: @tweet.id)
         end
     end
 
     def image_params2
-        if params[:tweet][:image]
+        if params[:tweet][:image2]
           params.require(:tweet).permit(:image2).merge(tweet_id: @tweet.id)
         end
     end
 
     def image_params3
-        if params[:tweet][:image]
+        if params[:tweet][:image3]
           params.require(:tweet).permit(:image3).merge(tweet_id: @tweet.id)
         end
     end
