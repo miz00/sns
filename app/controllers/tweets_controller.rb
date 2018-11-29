@@ -47,9 +47,19 @@ class TweetsController < ApplicationController
         @replies = Reply.all
     end
 
+    # enable_to_see?(t,current_user)
+    def enable_to_see?(tweet,current_user)
+        false
+        if tweet.user_id != current_user.id && tweet.privacy_status == "me"
+            true
+        end
+    end
+
+    helper_method :enable_to_see?
+
     private
     def tweet_params
-        params.require(:tweet).permit(:text, :privacy_status).merge(user_id: params[:user_id]) 
+        params.require(:tweet).permit(:text, :privacy_status).merge(user_id: current_user.id) 
     end
 
     def image_params1

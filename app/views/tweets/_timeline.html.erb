@@ -12,13 +12,13 @@
         <%= link_to "like", user_tweet_favs_path(current_user.id, t), method: :post %>
     <% end %>
     <% if t.user_id == current_user.id %>
-        <%= link_to "x", user_tweet_path(t.user_id, t), method: :delete, data: {confirm: "Are you sure?"} %>
+        <%= link_to "x", user_tweet_path(current_user.id, t), method: :delete, data: {confirm: "Are you sure?"} %>
     <% end %>
 <%# replyがある場合replyを表示する %>
     <ul>
         <% t.replies.each do |r| %>
             <%# reply.tweet.user_idがcurrent_userの時公開範囲関係なし %>
-            <% if Tweet.privacy_status_check?(r.tweet,current_user) then next end %>
+            <% if enable_to_see?(r.tweet,current_user) then next end %>
             <%= render partial: "reply", locals: {r: r, t: t} %>
         <% end %>
     </ul>

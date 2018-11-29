@@ -11,13 +11,13 @@ class UsersController < ApplicationController
     def show
         @user = User.find(params[:id])
         if !user_signed_in?
-            @tweets = Tweet.where(user_id: @user).everyone.order(created_at: :desc)
+            @tweets = Tweet.where(user_id: @user.id).everyone.order(created_at: :desc)
         elsif current_user.id == @user.id
-            @tweets = Tweet.where(user_id: @user).order(created_at: :desc)
+            @tweets = Tweet.where(user_id: @user.id).order(created_at: :desc)
         elsif Follow.where(target_user_id: params[:id], user_id: current_user.id)
-            @tweets = Tweet.where(user_id: @user).everyone.order(created_at: :desc)
+            @tweets = Tweet.where(user_id: @user.id).everyone.order(created_at: :desc)
         else
-            @tweets = Tweet.where(user_id: @user).everyone.or(Tweet.where(user_id: @user).followers).order(created_at: :desc)         
+            @tweets = Tweet.where(user_id: @user.id).everyone.or(Tweet.where(user_id: @user.id).followers).order(created_at: :desc)         
         end
         my_tweet_id = @tweets.pluck(:id)
         @replies = Reply.where(tweet_id: my_tweet_id)
@@ -27,12 +27,12 @@ class UsersController < ApplicationController
 
     #GET /users/:id/edit
     def edit
-        @user = User.find(params[:id])
+        @user = User.find(current_user.id)
     end
 
     #PATCH /users/:id
     def update
-        @user = User.find(params[:id])
+        @user = User.find(current_user.id)
         if @user.update(user_params)
             redirect_to user_path(@user), notice: "Your profile was successfully updated."
         else
