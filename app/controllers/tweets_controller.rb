@@ -11,8 +11,9 @@ class TweetsController < ApplicationController
     if image_params1 then @image = Image.create(image: image_params1[:image1], tweet_id: image_params1[:tweet_id]) end
     if image_params2 then @image = Image.create(image: image_params2[:image2], tweet_id: image_params2[:tweet_id]) end
     if image_params3 then @image = Image.create(image: image_params3[:image3], tweet_id: image_params3[:tweet_id]) end
-    if @tweet
-      redirect_to user_path(current_user), notice: "tweet was successfully created."
+      if @tweet
+      #redirect_to user_path(current_user), notice: "tweet was successfully created."
+      render json: @tweet
     else
       redirect_to new_user_tweet_path(current_user), notice: "tweet was not created."
     end
