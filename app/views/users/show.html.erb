@@ -36,12 +36,6 @@
 </div>
 
 <div>
-  <% if current_user.id == @user.id %>
-    <%= render partial: "form", locals: {users: @user, tweets: @tweets} %>
-  <% end %>
-</div>
-
-<div>
   <ul>
     <% @tweets.each do |t| %>
       <li>

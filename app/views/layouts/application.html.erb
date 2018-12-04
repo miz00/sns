@@ -7,6 +7,7 @@
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
   </head>
 
   <body>
@@ -17,5 +18,34 @@
     <% end %>
 
     <%= yield %>
+    <div id="current_user_id"><%= current_user.id %></div>
   </body>
+
+      <script>
+var data = document.getElementById("submit");
+data.addEventListener("click", function(){
+  console.log("Event chached")
+  createTweet()
+});
+
+function buildHTML(){
+  var　content = document.createElement("timeline_content");
+  document.body.appendChiled(content);
+}
+
+function createTweet(){
+  var xhr = new XMLHttpRequest();
+
+  // xhr.open('POST','http:///users/' + user_id + tweets');
+  xhr.open('POST','/users/3/tweets');
+
+  xhr.send();
+
+  xhr.onreadystatechange = function() {
+    if(xhr.readyState === 4 && xhr.status === 200) {
+      buildHTML();
+    }
+  };
+}
+</script>
 </html>

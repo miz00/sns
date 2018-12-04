@@ -1,4 +1,4 @@
-<li>
+<li id = "timeline_content" >
   <%= render partial: "icon", locals: {t: t} %><%= link_to "#{t.user.name}", user_path(t.user.id) %>  :<%= t.created_at %><br/>
   <%= t.text %><br/>
   <% t.images.each do |image| %>
@@ -23,3 +23,5 @@
     <% end %>
   </ul>
 </li>
+
+

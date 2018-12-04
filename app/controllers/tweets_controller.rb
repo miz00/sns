@@ -11,12 +11,19 @@ class TweetsController < ApplicationController
     if image_params1 then @image = Image.create(image: image_params1[:image1], tweet_id: image_params1[:tweet_id]) end
     if image_params2 then @image = Image.create(image: image_params2[:image2], tweet_id: image_params2[:tweet_id]) end
     if image_params3 then @image = Image.create(image: image_params3[:image3], tweet_id: image_params3[:tweet_id]) end
-      if @tweet
-      #redirect_to user_path(current_user), notice: "tweet was successfully created."
-      render json: @tweet
-    else
-      redirect_to new_user_tweet_path(current_user), notice: "tweet was not created."
-    end
+      respond_to do |format|
+        p @tweet
+        p format
+        if @tweet
+          format.html {redirect_to user_path(current_user), notice: "tweet was successfully created."}
+          format.json { render json: @tweet }
+          #redirect_to user_path(current_user), notice: "tweet was successfully created."
+          #render json: @tweet
+        else
+          #redirect_to new_user_tweet_path(current_user), notice: "tweet was not created."
+          format.html {redirect_to new_user_tweet_path(current_user), notice: "tweet was not created."}
+        end
+      end
   end
 
   #GET /users/1/tweets/new
@@ -46,6 +53,8 @@ class TweetsController < ApplicationController
     @tweets = Tweet.except_reply_tweets(@tweets)
     @users = User.all
     @replies = Reply.all
+    # For added ajax form
+    @tweet = Tweet.new
   end
 
   # enable_to_see?(t,current_user)

@@ -2,8 +2,13 @@
 <h1>Timeline</h1>
 <%= link_to "mypage", user_path(current_user.id) %><br/>
 <%= link_to "log out", destroy_user_session_path, method: :delete %><br/>
-<%= link_to "User検索", users_search_path %>
-<ul>
+<%= link_to "User検索", users_search_path %><br/>
+
+<div>
+  <%= render partial: "form", locals: {user: current_user, tweet: @tweet} %>
+</div>
+
+<ul id = "timeline_ul" >
   <% @tweets.each do |t| %>
     <% if enable_to_see?(t,current_user) then next end %>
     <%= render partial: "timeline", locals: {t: t, replies: @replies}%>

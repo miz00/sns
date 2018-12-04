@@ -1,9 +1,9 @@
-<%= form_with(model: [users,tweets], url: user_tweets_path) do |form| %>
-  <% if tweets.errors.any? %>
+<%= form_with(model: [user,tweet]) do |form| %>
+  <% if tweet.errors.any? %>
     <div>
-      <h2><%= pluralize(tweets.errors.count, "error" ) %>prohibited this tweet from being saved:</h2>
+      <h2><%= pluralize(tweet.errors.count, "error" ) %>prohibited this tweet from being saved:</h2>
       <ul>
-        <%= tweets.errors.full_messages.each do |message| %>
+        <%= tweet.errors.full_messages.each do |message| %>
           <li><%= message %></li>
         <% end %>
       </ul>
@@ -35,8 +35,8 @@
     <%= form.file_field :image3 %>
   </div>
 
-  <div>
-    <%= form.submit %>
+  <div id="submit">
+    <%= form.submit "submit", type: "button" %>
   </div>
 
 <% end %>
