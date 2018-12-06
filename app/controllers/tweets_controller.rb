@@ -7,6 +7,7 @@ class TweetsController < ApplicationController
 
   #POST /users/1/tweets
   def create
+    pp("in Tweet#create")
     @tweet = Tweet.create(tweet_params)
     if image_params1 then @image = Image.create(image: image_params1[:image1], tweet_id: image_params1[:tweet_id]) end
     if image_params2 then @image = Image.create(image: image_params2[:image2], tweet_id: image_params2[:tweet_id]) end
@@ -22,6 +23,7 @@ class TweetsController < ApplicationController
         else
           #redirect_to new_user_tweet_path(current_user), notice: "tweet was not created."
           format.html {redirect_to new_user_tweet_path(current_user), notice: "tweet was not created."}
+          format.json { render json: "error????" }
         end
       end
   end

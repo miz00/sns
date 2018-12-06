@@ -18,34 +18,72 @@
     <% end %>
 
     <%= yield %>
-    <div id="current_user_id"><%= current_user.id %></div>
+    <% if current_user %>
+      <div id="current_user_id"><%= current_user.id %></div>
+    <% end %>
   </body>
 
-      <script>
-var data = document.getElementById("submit");
-data.addEventListener("click", function(){
-  console.log("Event chached")
-  createTweet()
-});
+  <script>
+    function buildHTML(json){
+      var newList = document.createElement("li");
+      newList.id = "timeline_content";
 
-function buildHTML(){
-  var　content = document.createElement("timeline_content");
-  document.body.appendChiled(content);
-}
+      // JSONのデータを適用した内容(html)を作りたい...力ずくなので書換え要
+      var icon = document.createElement("img");
+      icon.src = "iconがあるひとはそれ取ってきてそうじゃない人デフォルト"
+      var text = document.createTextNode(json["text"]);
 
-function createTweet(){
-  var xhr = new XMLHttpRequest();
-
-  // xhr.open('POST','http:///users/' + user_id + tweets');
-  xhr.open('POST','/users/3/tweets');
-
-  xhr.send();
-
-  xhr.onreadystatechange = function() {
-    if(xhr.readyState === 4 && xhr.status === 200) {
-      buildHTML();
+      
+      // Contentを作成
+      var newContent = document.createTextNode(json["text"]);
+      newList.appendChild(newContent);
+      // 挿入
+      var ul = document.getElementById("timeline_ul");
+      var currentList = document.getElementById("timeline_content");
+      ul.insertBefore(newList,currentList);
     }
-  };
-}
-</script>
+
+    function createTweet(){
+      var xhr = new XMLHttpRequest();
+      
+      user_id = document.getElementById("current_user_id").textContent;
+      xhr.open('POST','/users/' + user_id + "/tweets.json");
+      // xhr.open('POST','/users/3/tweets.json');
+
+      console.log("POST open");
+
+      input = document.getElementsByTagName("input");
+      authenticity_token = input["authenticity_token"].value;
+      text = document.getElementById("tweet_text").value;
+      privacy_status = document.getElementById("tweet_privacy_status").value;
+      // image1 = document.getElementById("tweet_image1").value;
+      // image2 = document.getElementById("tweet_image2").value;
+      // image3 = document.getElementById("tweet_image3").value;
+
+      // send()の引数を作りたい
+      formData = new FormData();
+      formData.append("authenticity_token", authenticity_token);
+      formData.append("tweet[text]", text);
+      formData.append("tweet[privacy_status]", privacy_status);
+      // formData.append("tweet[image1]", image1);
+      // formData.append("tweet[image2]", image2);
+      // formData.append("tweet[image3]", image3);
+
+      xhr.send(formData);
+      console.log("send success");
+      
+      xhr.onreadystatechange = function() {
+        if(xhr.readyState === 4 && xhr.status === 200) {
+          var json = JSON.parse(xhr.responseText);
+          buildHTML(json);
+        }
+      };
+    }
+
+    var submit = document.getElementById("submit");
+    submit.addEventListener("click", function(){
+      console.log("Event catched");
+      createTweet();
+    });
+  </script>
 </html>
