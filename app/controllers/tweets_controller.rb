@@ -12,20 +12,30 @@ class TweetsController < ApplicationController
     if image_params1 then @image = Image.create(image: image_params1[:image1], tweet_id: image_params1[:tweet_id]) end
     if image_params2 then @image = Image.create(image: image_params2[:image2], tweet_id: image_params2[:tweet_id]) end
     if image_params3 then @image = Image.create(image: image_params3[:image3], tweet_id: image_params3[:tweet_id]) end
-      respond_to do |format|
-        p @tweet
-        p format
-        if @tweet
-          format.html {redirect_to user_path(current_user), notice: "tweet was successfully created."}
-          format.json { render json: @tweet }
-          #redirect_to user_path(current_user), notice: "tweet was successfully created."
-          #render json: @tweet
-        else
-          #redirect_to new_user_tweet_path(current_user), notice: "tweet was not created."
-          format.html {redirect_to new_user_tweet_path(current_user), notice: "tweet was not created."}
-          format.json { render json: "error????" }
-        end
+    #add user_icon_url into JSON response
+    if @tweet.user.image
+      image_url = "/uploads/store/" + @tweet.user.image.id
+    else
+      image_url = "/uploads/store/default_icon.jpg"
+    end
+    #add fav_count into JSON response
+    #後回し
+    #add
+    json_hash = {id: @tweet.id, user_id: @tweet.user_id, text: @tweet.text, privacy_status: @tweet.privacy_status,
+       created_at: @tweet.created_at, image_url: image_url, user_name: @tweet.user.name}
+    pp(json_hash)
+    respond_to do |format|
+      if @tweet
+        format.html {redirect_to user_path(current_user), notice: "tweet was successfully created."}
+        format.json { render json: json_hash }
+        #redirect_to user_path(current_user), notice: "tweet was successfully created."
+        #render json: @tweet
+      else
+        #redirect_to new_user_tweet_path(current_user), notice: "tweet was not created."
+        format.html {redirect_to new_user_tweet_path(current_user), notice: "tweet was not created."}
+        format.json { render json: "error????" }
       end
+    end
   end
 
   #GET /users/1/tweets/new

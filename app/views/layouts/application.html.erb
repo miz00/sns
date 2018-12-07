@@ -19,7 +19,7 @@
 
     <%= yield %>
     <% if current_user %>
-      <div id="current_user_id"><%= current_user.id %></div>
+      <div id="current_user_id" hidden><%= current_user.id %></div>
     <% end %>
   </body>
 
@@ -28,15 +28,51 @@
       var newList = document.createElement("li");
       newList.id = "timeline_content";
 
-      // JSONのデータを適用した内容(html)を作りたい...力ずくなので書換え要
-      var icon = document.createElement("img");
-      icon.src = "iconがあるひとはそれ取ってきてそうじゃない人デフォルト"
-      var text = document.createTextNode(json["text"]);
+      // JSONのデータを適用した内容(html)を作りたい
+      var content = document.getElementById("add_elem");
+      clone_content = content.cloneNode(true);
+      clone_content.id = "add_elem1"
+      clone_content.removeAttribute("hidden");
 
+      // 子要素のidを変更して要素を取得する
+      tmp = content.children;
+      tmp[0].id = "clone_add_img";
+      tmp[1].id = "clone_add_username";
+      tmp[2].id = "clone_add_reply";
+      tmp[3].id = "clone_add_like";
+      tmp[4].id = "clone_add_destroy";
+
+      var icon = document.getElementById("clone_add_img");
+      var username = document.getElementById("clone_add_username");
+      var reply = document.getElementById("clone_add_reply");
+      var like = document.getElementById("clone_add_like");
+      var destroy = document.getElementById("clone_add_destroy");
+
+      console.log(icon);
+      console.log(username);
+      console.log(reply);
+      console.log(like);
+
+      icon.src = json["image_url"];
+      username.href = "/users/" + json["user_id"];
+      username.insertAdjacentHTML('afterbegin', json["user_name"]);
+      var text = "  :" + json["created_at"] + "<br>" + json["text"] + "<br>";
+      username.insertAdjacentHTML('afterend', text);
+      reply.href = "/users/" + json["user_id"] + "/tweets/" + json["id"] + "replies/new";
+      like.href = "/users/"+ json["user_id"] + "/tweets/" + json["id"] + "/favs";
+      destroy.href = "/users/" + json["user_id"] + "/tweets/" + json["id"];
       
-      // Contentを作成
-      var newContent = document.createTextNode(json["text"]);
-      newList.appendChild(newContent);
+      console.log(icon);
+      console.log(username);
+      console.log(reply);
+      console.log(like);
+
+      clone_content = document.getElementById("add_elem1");
+      
+      console.log("######");
+      console.log(clone_content);
+      
+      newList.appendChild(clone_content);
       // 挿入
       var ul = document.getElementById("timeline_ul");
       var currentList = document.getElementById("timeline_content");

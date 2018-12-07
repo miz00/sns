@@ -14,3 +14,12 @@
     <%= render partial: "timeline", locals: {t: t, replies: @replies}%>
   <% end %>
 </ul>
+
+<div id="add_elem" hidden>
+  <img id ="add_img" width="20" height="20">
+  <a id="add_username"></a>
+  <a id="add_reply">reply</a>
+  ♡0
+  <a id="add_like" rel="nofollow" data-method="post">like</a>
+  <a id="add_destroy" data-confirm="Are you sure?" rel="nofollow" data-method="delete">x</a>
+</div>
