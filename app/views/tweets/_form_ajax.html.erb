@@ -1,4 +1,4 @@
-<%= form_with(model: [user,tweet], local: true) do |form| %>
+<%= form_with(model: [user,tweet]) do |form| %>
   <% if tweet.errors.any? %>
     <div>
       <h2><%= pluralize(tweet.errors.count, "error" ) %>prohibited this tweet from being saved:</h2>
@@ -19,24 +19,9 @@
     <%= form.label :privacy_status %>
     <%= form.select :privacy_status, [["全体に公開",'everyone'],["フォロワーのみに公開",'followers'],["自分のみに公開",'me']] %>
   </div>
-  
-  <div class = "field">
-    <%= form.label :image1 %>
-    <%= form.file_field :image1 %>
-  </div>
-
-  <div class = "field">
-    <%= form.label :image2 %>
-    <%= form.file_field :image2 %>
-  </div>
-
-  <div class = "field">
-    <%= form.label :image3 %>
-    <%= form.file_field :image3 %>
-  </div>
 
   <div id="submit">
-    <%= form.submit %>
+    <%= form.submit "submit", type: "button" %>
   </div>
 
 <% end %>
