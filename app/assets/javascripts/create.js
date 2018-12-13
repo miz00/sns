@@ -12,15 +12,15 @@ function buildHTML(json){
   tmp = clone_content.children;
   tmp[0].id = "clone_add_img";
   tmp[1].id = "clone_add_username";
-  tmp[2].id = "clone_add_reply";
-  tmp[3].id = "clone_add_like";
-  tmp[4].id = "clone_add_destroy";
+  tmp[3].id = "clone_add_reply";
+  tmp[4].id = "clone_add_like";
+  tmp[5].id = "clone_add_destroy";
 
   var icon = tmp[0];
   var username = tmp[1];
-  var reply = tmp[2];
-  var like = tmp[3];
-  var destroy = tmp[4];
+  var reply = tmp[3];
+  var like = tmp[4];
+  var destroy = tmp[5];
 
   icon.src = json["image_url"];
   username.href = "/users/" + json["user_id"];

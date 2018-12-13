@@ -8,11 +8,11 @@ class TweetsController < ApplicationController
   #POST /users/1/tweets
   def create
     pp("in Tweet#create")
-    @tweet = Tweet.create(tweet_params)
-    if image_params1 then @image = Image.create(image: image_params1[:image1], tweet_id: image_params1[:tweet_id]) end
+    @tweet = Tweet.create!(tweet_params)
+    if image_params1 then @image = Image.create!(image: params[:tweet][:image1], tweet_id: image_params1[:tweet_id]) end
     if image_params2 then @image = Image.create(image: image_params2[:image2], tweet_id: image_params2[:tweet_id]) end
     if image_params3 then @image = Image.create(image: image_params3[:image3], tweet_id: image_params3[:tweet_id]) end
-    #add user_icon_url into JSON response
+      #add user_icon_url into JSON response
     if @tweet.user.image
       image_url = "/uploads/store/" + @tweet.user.image.id
     else
