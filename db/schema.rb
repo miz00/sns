@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_11_041711) do
+ActiveRecord::Schema.define(version: 2018_12_13_041914) do
 
   create_table "favs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -36,6 +36,33 @@ ActiveRecord::Schema.define(version: 2018_12_11_041711) do
     t.datetime "updated_at", null: false
     t.text "image_data", null: false
     t.index ["tweet_id"], name: "index_images_on_tweet_id"
+  end
+
+  create_table "notification_favs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "notification_id"
+    t.bigint "fav_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["fav_id"], name: "index_notification_favs_on_fav_id"
+    t.index ["notification_id"], name: "index_notification_favs_on_notification_id"
+  end
+
+  create_table "notification_replies", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "notification_id"
+    t.bigint "reply_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["notification_id"], name: "index_notification_replies_on_notification_id"
+    t.index ["reply_id"], name: "index_notification_replies_on_reply_id"
+  end
+
+  create_table "notifications", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "target_tweet_user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["target_tweet_user_id"], name: "index_notifications_on_target_tweet_user_id"
+    t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
   create_table "replies", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -77,6 +104,12 @@ ActiveRecord::Schema.define(version: 2018_12_11_041711) do
   add_foreign_key "follows", "users"
   add_foreign_key "follows", "users", column: "target_user_id"
   add_foreign_key "images", "tweets"
+  add_foreign_key "notification_favs", "favs"
+  add_foreign_key "notification_favs", "notifications"
+  add_foreign_key "notification_replies", "notifications"
+  add_foreign_key "notification_replies", "replies"
+  add_foreign_key "notifications", "users"
+  add_foreign_key "notifications", "users", column: "target_tweet_user_id"
   add_foreign_key "replies", "tweets"
   add_foreign_key "replies", "tweets", column: "target_tweet_id"
   add_foreign_key "tweets", "users"

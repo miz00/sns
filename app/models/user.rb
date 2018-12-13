@@ -7,6 +7,7 @@ class User < ApplicationRecord
   has_many :tweets, dependent: :destroy
   has_many :favx, dependent: :destroy
   has_many :follows, dependent: :destroy
+  has_many :notifications, dependent: :destroy
 
   include ImageUploader[:image]
 
