@@ -44,8 +44,9 @@ class TweetsController < ApplicationController
   end
 
   #GET /users/1/tweets/:id
-  # def show
-  # end
+  def show
+    @tweet = Tweet.find(params[:id])
+  end
 
   #DELETE /users/1/tweets/:id
   def destroy

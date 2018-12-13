@@ -4,6 +4,7 @@
   <% t.images.each do |image| %>
     <%= image_tag image.image_url, :size => '200x200' %>
   <% end %><br/>
+  <%= link_to "tweet詳細", user_tweet_path(t.user.id, t.id)%>
   <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t) %>
   <%= "♡#{ t.favs.count }" %>
   <% if f = Tweet.has_fav(t.id, current_user.id) %>

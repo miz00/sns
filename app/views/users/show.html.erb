@@ -42,7 +42,7 @@
         <% if t.my_reply %>
             <strong>
               <%= "-- replied to "%>
-              <%= t.my_reply.target_tweet.user.name %>
+              <%= t.my_reply.target_tweet.user.name %><%= "'s 『" %><%= link_to "#{t.my_reply.target_tweet.text[0,5]}...』", user_tweet_path(t.my_reply.target_tweet.user.id, t.my_reply.target_tweet.id) %>
             </strong><br/>
           <% end %>
           <%= t.created_at %><br/>
@@ -52,6 +52,7 @@
         <% end %><br/>
         <%= "♡#{ t.favs.count }" %>
         <% if user_signed_in? %>
+          <%= link_to "tweet詳細", user_tweet_path(t.user.id, t.id)%>
           <% if f = fav(t) %>
             <%= link_to "like解除", user_tweet_fav_path(current_user.id, t, f), method: :delete %>
           <% else %>
@@ -60,7 +61,11 @@
           <% if t.user_id == current_user.id %>
             <%= link_to "x", user_tweet_path(current_user.id, t), method: :delete, data: {confirm: "Are you sure?"} %>
           <% end %>
-          <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t) %>
+          <% if Tweet.is_reply?(t.id) %>
+            <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t.my_reply.target_tweet) %>
+          <% else %>
+            <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t) %>
+          <% end %>
         <% end %>
       </li>
     <% end %>

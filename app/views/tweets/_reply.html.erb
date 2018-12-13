@@ -1,6 +1,7 @@
 <li>
   <%= render partial: "icon", locals: {t: r.tweet} %><%= r.tweet.user.name %>  :<%= r.tweet.created_at %><br/>
   <%= r.tweet.text %><br/>
+  <%= link_to "tweet詳細", user_tweet_path(t.user.id, t.id)%>
   <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t) %>
   <%= "♡#{ r.tweet.favs.count }" %>
   <% if f = Tweet.has_fav(r.tweet.id, current_user.id) %>
