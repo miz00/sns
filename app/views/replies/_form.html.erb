@@ -1,0 +1,27 @@
+<%= form_with(model: [users,tweets], url: user_tweet_replies_path, local: true) do |form| %>
+  <% if tweets.errors.any? %>
+    <div>
+      <h2><%= pluralize(tweets.errors.count, "error" ) %>prohibited this tweet from being saved:</h2>
+      <ul>
+        <%= tweets.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class = "field">
+    <%= form.label :text %><br/>
+    <%= form.text_area :text, size: "40x7" %>
+  </div>
+
+  <div class = "field">
+    <%= form.label :privacy_status %>
+    <%= form.select :privacy_status, [["全体に公開",'everyone'],["フォロワーのみに公開",'followers'],["自分のみに公開",'me']] %>
+  </div>
+  
+  <div>
+    <%= form.submit %>
+  </div>
+
+<% end %>

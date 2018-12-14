@@ -1,0 +1,7 @@
+<h1>ユーザー一覧(Admin Page)</h1>
+<ul>
+    <% @users.each do |user| %>
+      <li><%= link_to user.name, admin_user_path(user.id) %></li>
+    <% end %>
+</ul>
+<%= link_to "logout", destroy_user_session_path, method: :delete %>

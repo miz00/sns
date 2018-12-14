@@ -1,0 +1,34 @@
+<%= javascript_include_tag "application" %>
+<%= "現在のuser確認用: #{current_user.name}"%>
+<h1>Timeline</h1>
+<%= link_to "mypage", user_path(current_user.id) %><br/>
+<%= link_to "log out", destroy_user_session_path, method: :delete %><br/>
+<%= link_to "User検索", users_search_path %><br/>
+
+<div>
+  <%= render partial: "form_ajax", locals: {user: current_user, tweet: @tweet} %>
+</div>
+
+<script>
+  var submit = document.getElementById("submit");
+  submit.addEventListener("click", function(){
+    console.log("Event catched");
+    createTweet();
+  });
+</script>
+
+<ul id = "timeline_ul" >
+  <% @tweets.each do |t| %>
+    <% if t.enable_to_see?(current_user) then next end %>
+    <%= render partial: "timeline", locals: {t: t, replies: @replies}%>
+  <% end %>
+</ul>
+
+<div id="add_elem" hidden>
+  <img id ="add_img" width="20" height="20">
+  <a id="add_username"></a><br/>
+  <a id="add_reply">reply</a>
+  ♡0
+  <a id="add_like" rel="nofollow" data-method="post">like</a>
+  <a id="add_destroy" data-confirm="Are you sure?" rel="nofollow" data-method="delete">x</a>
+</div>

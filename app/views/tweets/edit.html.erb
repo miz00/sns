@@ -1,0 +1,28 @@
+<h1>User Profile編集</h1>
+<%= form_with(model: @user, url: user_edit_path, local: true) do |form| %>
+  <% if @user.errors.any? %>
+    <div>
+      <h2><%= pluralize(@user.errors.count, "error" ) %>prohibited this tweet from being saved:</h2>
+      <ul>
+        <%= @user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class = "field">
+    <%= form.label :name %><br/>
+    <%= form.text_field :name %>
+  </div>
+
+  <div class = "field">
+    <%= form.label :image %>
+    <%= form.file_field :image %>
+  </div>
+  
+  <div>
+    <%= form.submit %>
+  </div>
+
+<% end %>

@@ -1,0 +1,20 @@
+<% if user_signed_in? %>
+  <%= "現在のuser確認用: #{current_user.name}"%>
+<% else %>
+  <%= link_to "login", user_session_path %>
+<% end %>
+<h1>User検索</h1>
+<%= form_tag(users_search_path, :method => 'get') do %>
+  <%= text_field_tag :search, @user, placeholder: "User name" %>
+  <%= submit_tag 'Search', :name => nil %>
+<% end %>
+
+<ul>
+  <% if params[:search] && params[:search] != "" %>
+    <% @users.each do |u| %>
+      <li>
+        <%= link_to u.name, user_path(u.id)%>
+      </li>
+    <% end %>
+  <% end %>
+</ul>

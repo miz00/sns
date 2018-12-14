@@ -1,0 +1,27 @@
+<h1>Tweet詳細</h1><br>
+<%= link_to "戻る", :back %>
+<ul>
+  <%= render partial: "icon", locals: {t: @tweet} %><%= link_to "#{@tweet.user.name}", user_path(@tweet.user.id) %>  :<%= @tweet.created_at %><br/>
+  <%= @tweet.text %><br>
+  <% @tweet.images.each do |image| %>
+    <%= image_tag image.image_url, :size => '200x200' %>
+  <% end %><br/>
+  <%= link_to "reply", new_user_tweet_reply_path(current_user.id, @tweet) %>
+    <%= "♡#{ @tweet.favs.count }" %>
+    <% if f = @tweet.has_fav(current_user.id) %>
+      <%= link_to "like解除", user_tweet_fav_path(current_user.id, @tweet, f), method: :delete %>
+    <% else %>
+      <%= link_to "like", user_tweet_favs_path(current_user.id, @tweet), method: :post %>
+    <% end %>
+    <% if @tweet.user_id == current_user.id %>
+      <%= link_to "x", user_tweet_path(current_user.id, @tweet), method: :delete, data: {confirm: "Are you sure?"} %>
+    <% end %>
+  <%# replyがある場合replyを表示する %>
+    <ul>
+      <% @tweet.replies.each do |r| %>
+        <%# reply.tweet.user_idがcurrent_userの時公開範囲関係なし %>
+        <% if r.tweet.enable_to_see?(current_user) then next end %>
+        <%= render partial: "reply", locals: {r: r, t: @tweet} %>
+      <% end %>
+    </ul>
+</ul>
