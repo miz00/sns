@@ -1,0 +1,22 @@
+<h1>通知一覧</h1>
+<%= link_to "MyPageへ", user_path(params[:user_id]) %>
+<div>
+  <ul>
+    <% @notifications.each do |n| %>
+      <li>
+        <% if n.is_fav_notification? %>
+          <p>
+            <%= link_to "あなたのtweet[" + n.fav_tweet.text[0,5] + "...]", user_tweet_path(n.target_tweet_user_id, n.fav_tweet.id) %>に<%= n.user.name %>さんがいいねしました<br/>
+            <%= link_to "checked", user_notification_path(current_user.id, n.id), method: :delete %>
+          </p>
+        <% else %>
+          <p>
+            <%= link_to "あなたのtweet[" + n.reply_tweet.text[0,5] + "...]", user_tweet_path(n.target_tweet_user_id, n.reply_tweet.id) %>に<%= n.user.name %>さんが返信しました<br/>
+            <%= "Reply contents: " + n.notification_reply.reply.tweet.text %><br/>
+            <%= link_to "checked", user_notification_path(current_user.id, n.id), method: :delete %>
+          </p>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</div>

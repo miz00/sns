@@ -11,15 +11,15 @@ class Tweet < ApplicationRecord
   enum privacy_status: { everyone: 1, followers: 2, me: 3 }
 
   # is_reply?(t.id)
-  def self.is_reply?(tweet_id)
-    Reply.where(tweet_id: tweet_id).present?
+  def is_reply?
+    Reply.where(tweet_id: self.id).present?
   end
 
   # except_reply_tweets(tweets)
   def self.except_reply_tweets(tweets)
     array = []
     tweets.each do |t|
-      unless Tweet.is_reply?(t.id)
+      unless t.is_reply?
         array.push(t)
       end
     end
@@ -27,7 +27,16 @@ class Tweet < ApplicationRecord
   end
 
   # has_fav?(t.id,current_user.id)
-  def self.has_fav(tweet_id, user_id)
-    Fav.find_by(tweet_id: tweet_id, user_id: user_id)
+  def has_fav(user_id)
+    Fav.find_by(tweet_id: self.id, user_id: user_id)
   end
+
+  # enable_to_see?(t,current_user)
+  def enable_to_see?(current_user)
+    false
+    if self.user_id != current_user.id && self.privacy_status == "me"
+      true
+    end
+  end
+
 end

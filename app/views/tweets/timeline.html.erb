@@ -19,7 +19,7 @@
 
 <ul id = "timeline_ul" >
   <% @tweets.each do |t| %>
-    <% if enable_to_see?(t,current_user) then next end %>
+    <% if t.enable_to_see?(current_user) then next end %>
     <%= render partial: "timeline", locals: {t: t, replies: @replies}%>
   <% end %>
 </ul>

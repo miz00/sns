@@ -7,7 +7,7 @@
   <%= link_to "tweet詳細", user_tweet_path(t.user.id, t.id)%>
   <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t) %>
   <%= "♡#{ t.favs.count }" %>
-  <% if f = Tweet.has_fav(t.id, current_user.id) %>
+  <% if f = t.has_fav(current_user.id) %>
     <%= link_to "like解除", user_tweet_fav_path(current_user.id, t, f), method: :delete %>
   <% else %>
     <%= link_to "like", user_tweet_favs_path(current_user.id, t), method: :post %>
@@ -19,7 +19,7 @@
   <ul>
     <% t.replies.each do |r| %>
       <%# reply.tweet.user_idがcurrent_userの時公開範囲関係なし %>
-      <% if enable_to_see?(r.tweet,current_user) then next end %>
+      <% if r.tweet.enable_to_see?(current_user) then next end %>
       <%= render partial: "reply", locals: {r: r, t: t} %>
     <% end %>
   </ul>

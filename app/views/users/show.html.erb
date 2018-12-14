@@ -8,6 +8,7 @@
       <%= link_to "log out", destroy_user_session_path, method: :delete %>
       <% if current_user.id == @user.id %>
         <%= link_to "profile編集", edit_user_path(params[:id]) %>
+        <%= link_to "通知一覧", user_notifications_path(current_user.id) %>
       <% else %>
         <% if @follow %>
           <%= link_to "Unfollow", user_follow_path(@user, @follow.id), method: :delete, data: {confirm: "Are you sure?"} %>
@@ -61,7 +62,7 @@
           <% if t.user_id == current_user.id %>
             <%= link_to "x", user_tweet_path(current_user.id, t), method: :delete, data: {confirm: "Are you sure?"} %>
           <% end %>
-          <% if Tweet.is_reply?(t.id) %>
+          <% if t.is_reply? %>
             <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t.my_reply.target_tweet) %>
           <% else %>
             <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t) %>

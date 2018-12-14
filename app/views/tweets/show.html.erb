@@ -5,10 +5,10 @@
   <%= @tweet.text %><br>
   <% @tweet.images.each do |image| %>
     <%= image_tag image.image_url, :size => '200x200' %>
-  <% end %>
+  <% end %><br/>
   <%= link_to "reply", new_user_tweet_reply_path(current_user.id, @tweet) %>
     <%= "♡#{ @tweet.favs.count }" %>
-    <% if f = Tweet.has_fav(@tweet.id, current_user.id) %>
+    <% if f = @tweet.has_fav(current_user.id) %>
       <%= link_to "like解除", user_tweet_fav_path(current_user.id, @tweet, f), method: :delete %>
     <% else %>
       <%= link_to "like", user_tweet_favs_path(current_user.id, @tweet), method: :post %>
@@ -20,7 +20,7 @@
     <ul>
       <% @tweet.replies.each do |r| %>
         <%# reply.tweet.user_idがcurrent_userの時公開範囲関係なし %>
-        <% if enable_to_see?(r.tweet,current_user) then next end %>
+        <% if r.tweet.enable_to_see?(current_user) then next end %>
         <%= render partial: "reply", locals: {r: r, t: @tweet} %>
       <% end %>
     </ul>

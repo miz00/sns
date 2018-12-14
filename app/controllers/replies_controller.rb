@@ -8,7 +8,9 @@ class RepliesController < ApplicationController
   def create
     @tweet = Tweet.create(tweet_params)
     if @tweet
-      Reply.create(tweet_id: @tweet.id, target_tweet_id: params[:tweet_id])
+      reply = Reply.create(tweet_id: @tweet.id, target_tweet_id: params[:tweet_id])
+      notification = Notification.create(user_id: current_user.id, target_tweet_user_id: @tweet.user.id)
+      NotificationReply.create(notification_id: notification.id, reply_id: reply.id)
       redirect_to users_tweets_timeline_path, notice: "tweet was successfully created."
     else
       redirect_to new_user_tweet_reply_path(current_user,params[:tweet_id]), notice: "tweet was not created."
