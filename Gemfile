@@ -79,3 +79,7 @@ end
 
 # Install Shrine
 gem "shrine", github: 'janko-m/shrine'
+
+#install Bootstrap
+gem 'bootstrap-sass'
+gem 'jquery-rails'

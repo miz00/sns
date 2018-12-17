@@ -17,7 +17,7 @@
   });
 </script>
 
-<ul id = "timeline_ul" >
+<ul id = "timeline_ul", class="list-group" >
   <% @tweets.each do |t| %>
     <% if t.enable_to_see?(current_user) then next end %>
     <%= render partial: "timeline", locals: {t: t, replies: @replies}%>

@@ -11,15 +11,23 @@
   </head>
 
   <body>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
-    <% if !user_signed_in? %>
-      <p>currently you are not logged in!</p>
+    <% if user_signed_in? %>
+      <%= render "layouts/header_not_login" %>
+    <% else %>
+      <%= render "layouts/header" %>
     <% end %>
+    
+    <div class = "container">
+      <p class="notice"><%= notice %></p>
+      <p class="alert"><%= alert %></p>
+      <% if !user_signed_in? %>
+        <p>currently you are not logged in!</p>
+      <% end %>
 
-    <%= yield %>
-    <% if current_user %>
-      <div id="current_user_id" hidden><%= current_user.id %></div>
-    <% end %>
+      <%= yield %>
+      <% if current_user %>
+        <div id="current_user_id" hidden><%= current_user.id %></div>
+      <% end %>
+    </div>
   </body>
 </html>

@@ -51,9 +51,15 @@
           <% t.images.each do |image| %>
             <%= image_tag image.image_url, :size => '200x200' %>
         <% end %><br/>
-        <%= "♡#{ t.favs.count }" %>
+        
         <% if user_signed_in? %>
           <%= link_to "tweet詳細", user_tweet_path(t.user.id, t.id)%>
+          <% if t.is_reply? %>
+            <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t.my_reply.target_tweet) %>
+          <% else %>
+            <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t) %>
+          <% end %>
+          <%= "♡#{ t.favs.count }" %>
           <% if f = fav(t) %>
             <%= link_to "like解除", user_tweet_fav_path(current_user.id, t, f), method: :delete %>
           <% else %>
@@ -61,11 +67,6 @@
           <% end %>
           <% if t.user_id == current_user.id %>
             <%= link_to "x", user_tweet_path(current_user.id, t), method: :delete, data: {confirm: "Are you sure?"} %>
-          <% end %>
-          <% if t.is_reply? %>
-            <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t.my_reply.target_tweet) %>
-          <% else %>
-            <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t) %>
           <% end %>
         <% end %>
       </li>
