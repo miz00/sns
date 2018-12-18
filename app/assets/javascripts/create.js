@@ -1,6 +1,7 @@
 function buildHTML(json){
   var newList = document.createElement("li");
   newList.id = "timeline_content";
+  newList.classList.add("list-group-item");
 
   // JSONのデータを適用した内容(html)を作りたい
   var content = document.getElementById("add_elem");
@@ -27,7 +28,7 @@ function buildHTML(json){
   username.insertAdjacentHTML('afterbegin', json["user_name"]);
   var text = "  :" + json["created_at"] + "<br>" + json["text"] + "<br>";
   username.insertAdjacentHTML('afterend', text);
-  reply.href = "/users/" + json["user_id"] + "/tweets/" + json["id"] + "replies/new";
+  reply.href = "/users/" + json["user_id"] + "/tweets/" + json["id"] + "/replies/new";
   like.href = "/users/"+ json["user_id"] + "/tweets/" + json["id"] + "/favs";
   destroy.href = "/users/" + json["user_id"] + "/tweets/" + json["id"];
 

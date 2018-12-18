@@ -1,9 +1,9 @@
 <h1>通知一覧</h1>
 <%= link_to "MyPageへ", user_path(params[:user_id]) %>
 <div>
-  <ul>
+  <ul class="list-group">
     <% @notifications.each do |n| %>
-      <li>
+      <li class="list-group-item">
         <% if n.is_fav_notification? %>
           <p>
             <%= link_to "あなたのtweet[" + n.fav_tweet.text[0,5] + "...]", user_tweet_path(n.target_tweet_user_id, n.fav_tweet.id) %>に<%= n.user.name %>さんがいいねしました<br/>

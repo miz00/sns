@@ -33,10 +33,7 @@ class Tweet < ApplicationRecord
 
   # enable_to_see?(t,current_user)
   def enable_to_see?(current_user)
-    false
-    if self.user_id != current_user.id && self.privacy_status == "me"
-      true
-    end
+    self.user_id != current_user.id && self.privacy_status == "me"
   end
 
 end
