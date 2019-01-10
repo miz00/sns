@@ -26,7 +26,7 @@ class Tweet < ApplicationRecord
     array
   end
 
-  # has_fav?(t.id,current_user.id)
+  # has_fav(t.id,current_user.id)
   def has_fav(user_id)
     Fav.find_by(tweet_id: id, user_id: user_id)
   end
