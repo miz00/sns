@@ -60,7 +60,7 @@ class TweetsController < ApplicationController
     follows = Follow.where(user_id: current_user.id)
     follower_user_ids = follows.pluck(:target_user_id)
     follower_user_ids.push(current_user.id)
-    @tweets = Tweet.where(user_id: follower_user_ids).order(created_at: :desc)
+    @tweets = Tweet.where(user_id: follower_user_ids).order(created_at: :desc).includes(:favs,:images,:replies,:user)
     @tweets = Tweet.except_reply_tweets(@tweets)
     @users = User.all
     @replies = Reply.all

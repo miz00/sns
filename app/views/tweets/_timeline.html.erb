@@ -11,7 +11,7 @@
   <div>
     <%= link_to "tweet詳細", user_tweet_path(t.user.id, t.id)%>
     <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t) %>
-    <%= "♡#{ t.favs.count }" %>
+    <%= "♡#{ t.favs.size }" %>
     <% if f = t.has_fav(current_user.id) %>
       <%= link_to "like解除", user_tweet_fav_path(current_user.id, t, f), method: :delete %>
     <% else %>

@@ -11,13 +11,13 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     if !user_signed_in?
-      @tweets = Tweet.where(user_id: @user.id).everyone.order(created_at: :desc)
+      @tweets = Tweet.where(user_id: @user.id).everyone.order(created_at: :desc).includes(:user,:favs,:images)
     elsif current_user.id == @user.id
-      @tweets = Tweet.where(user_id: @user.id).order(created_at: :desc)
+      @tweets = Tweet.where(user_id: @user.id).order(created_at: :desc).includes(:user,:favs,:images)
     elsif Follow.where(target_user_id: params[:id], user_id: current_user.id)
-      @tweets = Tweet.where(user_id: @user.id).everyone.order(created_at: :desc)
+      @tweets = Tweet.where(user_id: @user.id).everyone.order(created_at: :desc).includes(:user,:favs,:images)
     else
-      @tweets = Tweet.where(user_id: @user.id).everyone.or(Tweet.where(user_id: @user.id).followers).order(created_at: :desc)         
+      @tweets = Tweet.where(user_id: @user.id).everyone.or(Tweet.where(user_id: @user.id).followers).order(created_at: :desc).includes(:user,:favs,:images)      
     end
     my_tweet_id = @tweets.pluck(:id)
     @replies = Reply.where(tweet_id: my_tweet_id)
