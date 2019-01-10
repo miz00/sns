@@ -1,5 +1,6 @@
-class RepliesController < ApplicationController
+# frozen_string_literal: true
 
+class RepliesController < ApplicationController
   def new
     @users = current_user
     @tweets = Tweet.new
@@ -11,9 +12,9 @@ class RepliesController < ApplicationController
       reply = Reply.create(tweet_id: @tweet.id, target_tweet_id: params[:tweet_id])
       notification = Notification.create(user_id: current_user.id, target_tweet_user_id: @tweet.user.id)
       NotificationReply.create(notification_id: notification.id, reply_id: reply.id)
-      redirect_to users_tweets_timeline_path, notice: "tweet was successfully created."
+      redirect_to users_tweets_timeline_path, notice: 'tweet was successfully created.'
     else
-      redirect_to new_user_tweet_reply_path(current_user,params[:tweet_id]), notice: "tweet was not created."
+      redirect_to new_user_tweet_reply_path(current_user, params[:tweet_id]), notice: 'tweet was not created.'
     end
   end
 
@@ -25,8 +26,8 @@ class RepliesController < ApplicationController
   end
 
   private
-  def tweet_params
-    params.require(:tweet).permit(:text, :privacy_status).merge(user_id: params[:user_id]) 
-  end
 
+  def tweet_params
+    params.require(:tweet).permit(:text, :privacy_status).merge(user_id: params[:user_id])
+  end
 end

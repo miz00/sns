@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateNotificationFavs < ActiveRecord::Migration[5.2]
   def change
     create_table :notification_favs do |t|
