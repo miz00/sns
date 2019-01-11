@@ -9,19 +9,20 @@ RSpec.describe User, type: :model do
   it "is invalied without a name" do
     user = User.new(name: nil, email: "one@test.jp", password: "123456")
     user.valid?
-    expect(user.errors[:name]).not_to include("can't be blank")
+    expect(user.errors[:name]).to include("can't be blank")
   end
 
   it "is invalied without an email" do
     user = User.new(name: "one", email: nil, password: "123456")
     user.valid?
-    expect(user.errors[:email]).not_to include("can't be blank")
+    #expect(user).to have(1).errors_on("email")
+    expect(user.errors[:email].size).to eq 1
   end
 
   it "is invalied without a password" do
     user = User.new(name: "one", email: "one@test.jp", password: nil)
     user.valid?
-    expect(user.errors[:password]).not_to include("can't be blank")
+    expect(user.errors[:password]).to include("can't be blank")
   end
 
   #検索メソッドのテスト
@@ -33,7 +34,7 @@ RSpec.describe User, type: :model do
 
     context "with matching letters" do
       it "returns an array of results that match" do
-        expect(User.serach("one")).to eq[@one]
+        expect(User.search("one")).to eq [@one]
       end
     end
 

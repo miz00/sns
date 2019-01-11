@@ -4,7 +4,7 @@ class FollowsController < ApplicationController
   # POST users/:user_id/follows
   def create
     begin
-      Follow.create(user_id: current_user.id, target_user_id: params[:user_id])
+      Follow.create!(user_id: current_user.id, target_user_id: params[:user_id])
       redirect_to user_path(params[:user_id])
     rescue => e
       #render :text => e.message

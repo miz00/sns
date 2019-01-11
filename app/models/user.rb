@@ -14,6 +14,8 @@ class User < ApplicationRecord
 
   include ImageUploader[:image]
 
+  validates :name, presence: true
+
   def self.search(search)
     where(['name LIKE ?', "%#{search}%"]) if search && search != ''
   end

@@ -65,7 +65,7 @@ class TweetsController < ApplicationController
     @tweets = Tweet.where(user_id: follower_user_ids).order(created_at: :desc).includes(:favs,:images,:replies,:user)
     @tweets = Tweet.except_reply_tweets(@tweets)
     #follow.tweet.replyのような形でとりたい
-    @replies = Reply.all
+    #@replies = Reply.all
     # For added ajax form
     @tweet = Tweet.new
   end
