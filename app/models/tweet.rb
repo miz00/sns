@@ -14,21 +14,18 @@ class Tweet < ApplicationRecord
 
   # is_reply?(t.id)
   def is_reply?
-    Reply.where(tweet_id: id).present?
+    self.my_reply.present?
   end
 
   # except_reply_tweets(tweets)
   def self.except_reply_tweets(tweets)
-    array = []
-    tweets.each do |t|
-      array.push(t) unless t.is_reply?
-    end
-    array
+    tweets.select{|t| [].push(t) unless t.is_reply?}
   end
 
   # has_fav(t.id,current_user.id)
   def has_fav(user_id)
-    Fav.find_by(tweet_id: id, user_id: user_id)
+    #find_byでN+1が発生するので、自分のfavsのlistと該当tweetオブジェクトに対するfavsのlistを照合するなど対策できるそう
+    self.favs.find_by(user_id: user_id)
   end
 
   # enable_to_see?(t,current_user)

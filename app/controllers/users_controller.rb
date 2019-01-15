@@ -4,25 +4,20 @@ class UsersController < ApplicationController
   # GET /users/serach
   def search
     @users = User.search(params[:search])
-    pp(params[:search])
-    pp(@users)
   end
 
   # GET /users/:id
   def show
     @user = User.find(params[:id])
     if !user_signed_in?
-      @tweets = Tweet.where(user_id: @user.id).everyone.order(created_at: :desc).includes(:user,:favs,:images)
+      @tweets = Tweet.where(user_id: @user.id).everyone.order(created_at: :desc).includes(:user,:favs,:images,:my_reply)
     elsif current_user.id == @user.id
-      @tweets = Tweet.where(user_id: @user.id).order(created_at: :desc).includes(:user,:favs,:images)
-    elsif Follow.where(target_user_id: params[:id], user_id: current_user.id)
-      @tweets = Tweet.where(user_id: @user.id).everyone.order(created_at: :desc).includes(:user,:favs,:images)
+      @tweets = Tweet.where(user_id: @user.id).order(created_at: :desc).includes(:user,:favs,:images,:my_reply)
+    elsif Follow.where(target_user_id: params[:id], user_id: current_user.id).present?
+      @tweets = Tweet.where(user_id: @user.id).everyone.order(created_at: :desc).includes(:user,:favs,:images,:my_reply)
     else
-      @tweets = Tweet.where(user_id: @user.id).everyone.or(Tweet.where(user_id: @user.id).followers).order(created_at: :desc).includes(:user,:favs,:images)      
+      @tweets = Tweet.where(user_id: @user.id).everyone.or(Tweet.where(user_id: @user.id).followers).order(created_at: :desc).includes(:user,:favs,:images,:my_reply)      
     end
-    my_tweet_id = @tweets.pluck(:id)
-    @replies = Reply.where(tweet_id: my_tweet_id)
-    @images = Image.where(tweet_id: my_tweet_id)
     if user_signed_in? then @follow = Follow.find_by(user_id: current_user.id, target_user_id: params[:id]) end
   end
 
