@@ -33,7 +33,6 @@ class TweetsController < ApplicationController
         format.html { render action: :timeline }
         format.json { render json: 'error' }
       end
-    end
   end
 
   # GET /users/1/tweets/new
