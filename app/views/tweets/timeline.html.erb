@@ -1,12 +1,10 @@
 <%= javascript_include_tag "application" %>
 <%= "現在のuser確認用: #{current_user.name}"%>
 <h1>Timeline</h1>
-<%= link_to "mypage", user_path(current_user.id) %><br/>
-<%= link_to "log out", destroy_user_session_path, method: :delete %><br/>
-<%= link_to "User検索", users_search_path %><br/>
 
 <div>
   <%= render partial: "form_ajax", locals: {user: current_user, tweet: @tweet} %>
+  <br/>
 </div>
 
 <script>
@@ -17,10 +15,10 @@
   });
 </script>
 
-<ul id = "timeline_ul" >
+<ul id = "timeline_ul", class="list-group" >
   <% @tweets.each do |t| %>
     <% if t.enable_to_see?(current_user) then next end %>
-    <%= render partial: "timeline", locals: {t: t, replies: @replies}%>
+    <%= render partial: "timeline", locals: {t: t}%>
   <% end %>
 </ul>
 

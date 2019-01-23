@@ -1,0 +1,15 @@
+<header class="navbar navbar-fixed-top navbar-default">
+  <div class="navbar-brand">Sample_App</div>
+  <div class="container">
+    
+    <nav>
+      <ul class="nav navbar-nav navbar-right">
+        <li><%= link_to "timeline", users_tweets_timeline_path %></li>
+        <li><%= link_to "mypage", user_path(current_user.id) %></li>
+        <li><%= link_to "User検索", users_search_path %></li>
+        <li><%= link_to "通知一覧", user_notifications_path(current_user.id) %></li>
+        <li><%= link_to "log out", destroy_user_session_path, method: :delete %></li>
+      </ul>
+    </nav>
+  </div>
+</header>

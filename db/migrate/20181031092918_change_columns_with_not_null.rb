@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ChangeColumnsWithNotNull < ActiveRecord::Migration[5.2]
   def change
     change_column :users, :e_mail, :string, null: false

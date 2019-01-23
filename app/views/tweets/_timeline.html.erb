@@ -1,22 +1,28 @@
-<li id = "timeline_content" >
-  <%= render partial: "icon", locals: {t: t} %><%= link_to "#{t.user.name}", user_path(t.user.id) %>  :<%= t.created_at %><br/>
-  <%= t.text %><br/>
+<li id = "timeline_content", class="list-group-item" >
+  <div>
+    <%= render partial: "icon", locals: {t: t} %><%= link_to "#{t.user.name}", user_path(t.user.id) %>  :<%= t.created_at %><br/>
+  </div>
+  <div>
+    <%= t.text %><br/>
+  </div>
   <% t.images.each do |image| %>
     <%= image_tag image.image_url, :size => '200x200' %>
   <% end %><br/>
-  <%= link_to "tweet詳細", user_tweet_path(t.user.id, t.id)%>
-  <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t) %>
-  <%= "♡#{ t.favs.count }" %>
-  <% if f = t.has_fav(current_user.id) %>
-    <%= link_to "like解除", user_tweet_fav_path(current_user.id, t, f), method: :delete %>
-  <% else %>
-    <%= link_to "like", user_tweet_favs_path(current_user.id, t), method: :post %>
-  <% end %>
-  <% if t.user_id == current_user.id %>
-    <%= link_to "x", user_tweet_path(current_user.id, t), method: :delete, data: {confirm: "Are you sure?"} %>
-  <% end %>
+  <div>
+    <%= link_to "tweet詳細", user_tweet_path(t.user.id, t.id)%>
+    <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t) %>
+    <%= "♡#{ t.favs.size }" %>
+    <% if f = t.has_fav(current_user.id) %>
+      <%= link_to "like解除", user_tweet_fav_path(current_user.id, t, f), method: :delete %>
+    <% else %>
+      <%= link_to "like", user_tweet_favs_path(current_user.id, t), method: :post %>
+    <% end %>
+    <% if t.user_id == current_user.id %>
+      <%= link_to "x", user_tweet_path(current_user.id, t), method: :delete, data: {confirm: "Are you sure?"} %>
+    <% end %>
+  </div>
 <%# replyがある場合replyを表示する %>
-  <ul>
+  <ul class="list-group">
     <% t.replies.each do |r| %>
       <%# reply.tweet.user_idがcurrent_userの時公開範囲関係なし %>
       <% if r.tweet.enable_to_see?(current_user) then next end %>

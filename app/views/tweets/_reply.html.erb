@@ -1,15 +1,21 @@
-<li>
-  <%= render partial: "icon", locals: {t: r.tweet} %><%= r.tweet.user.name %>  :<%= r.tweet.created_at %><br/>
-  <%= r.tweet.text %><br/>
-  <%= link_to "tweet詳細", user_tweet_path(t.user.id, t.id)%>
-  <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t) %>
-  <%= "♡#{ r.tweet.favs.count }" %>
-  <% if f = r.tweet.has_fav(current_user.id) %>
-    <%= link_to "like解除", user_tweet_fav_path(current_user.id, r.tweet.id, f), method: :delete %>
-  <% else %>
-    <%= link_to "like", user_tweet_favs_path(current_user.id, r.tweet.id), method: :post %>
-  <% end %>
-  <% if r.tweet.user_id == current_user.id %>
-    <%= link_to "x", user_tweet_reply_path(current_user.id, t, r), method: :delete, data: {confirm: "Are you sure?"} %>
-  <% end %>
+<li class="list-group-item">
+  <div>
+    <%= render partial: "icon", locals: {t: r.tweet} %><%= r.tweet.user.name %>  :<%= r.tweet.created_at %><br/>
+  </div>
+  <div>
+    <%= r.tweet.text %><br/>
+  </div>
+  <div>
+    <%= link_to "tweet詳細", user_tweet_path(t.user.id, t.id)%>
+    <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t.id) %>
+    <%= "♡#{ r.tweet.favs.count }" %>
+    <% if f = r.tweet.has_fav(current_user.id) %>
+      <%= link_to "like解除", user_tweet_fav_path(current_user.id, r.tweet.id, f), method: :delete %>
+    <% else %>
+      <%= link_to "like", user_tweet_favs_path(current_user.id, r.tweet.id), method: :post %>
+    <% end %>
+    <% if r.tweet.user_id == current_user.id %>
+      <%= link_to "x", user_tweet_reply_path(current_user.id, t.id, r.tweet.id), method: :delete, data: {confirm: "Are you sure?"} %>
+    <% end %>
+  </div>
 </li>

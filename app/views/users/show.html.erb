@@ -4,11 +4,8 @@
   <% if user_signed_in? %>
       <%#ログイン済みユーザーの場合%>
       <%= link_to "new post", new_user_tweet_path(current_user.id) %><br/>
-      <%= link_to "timelineへ", users_tweets_timeline_path %>
-      <%= link_to "log out", destroy_user_session_path, method: :delete %>
       <% if current_user.id == @user.id %>
         <%= link_to "profile編集", edit_user_path(params[:id]) %>
-        <%= link_to "通知一覧", user_notifications_path(current_user.id) %>
       <% else %>
         <% if @follow %>
           <%= link_to "Unfollow", user_follow_path(@user, @follow.id), method: :delete, data: {confirm: "Are you sure?"} %>
@@ -37,9 +34,9 @@
 </div>
 
 <div>
-  <ul>
+  <ul class="list-group">
     <% @tweets.each do |t| %>
-      <li>
+      <li class="list-group-item">
         <% if t.my_reply %>
             <strong>
               <%= "-- replied to "%>
@@ -51,9 +48,15 @@
           <% t.images.each do |image| %>
             <%= image_tag image.image_url, :size => '200x200' %>
         <% end %><br/>
-        <%= "♡#{ t.favs.count }" %>
+        
         <% if user_signed_in? %>
           <%= link_to "tweet詳細", user_tweet_path(t.user.id, t.id)%>
+          <% if t.is_reply? %>
+            <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t.my_reply.target_tweet) %>
+          <% else %>
+            <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t) %>
+          <% end %>
+          <%= "♡#{ t.favs.size }" %>
           <% if f = fav(t) %>
             <%= link_to "like解除", user_tweet_fav_path(current_user.id, t, f), method: :delete %>
           <% else %>
@@ -61,11 +64,6 @@
           <% end %>
           <% if t.user_id == current_user.id %>
             <%= link_to "x", user_tweet_path(current_user.id, t), method: :delete, data: {confirm: "Are you sure?"} %>
-          <% end %>
-          <% if t.is_reply? %>
-            <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t.my_reply.target_tweet) %>
-          <% else %>
-            <%= link_to "reply", new_user_tweet_reply_path(current_user.id, t) %>
           <% end %>
         <% end %>
       </li>

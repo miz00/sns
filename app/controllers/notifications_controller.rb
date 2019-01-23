@@ -1,21 +1,17 @@
+# frozen_string_literal: true
+
 class NotificationsController < ApplicationController
-  
-  #GET users/:user_id/notifications
+  # GET users/:user_id/notifications
   def index
     @notifications = Notification.where(user_id: current_user.id)
   end
 
-  #POST users/:user_id/notifications
-  def create
+  # POST users/:user_id/notifications
+  def create; end
 
-  end
-
-  #DELETE users/:user_id/notifications/:id
+  # DELETE users/:user_id/notifications/:id
   def destroy
     notification = Notification.find(params[:id])
-    if notification.destroy
-      redirect_to user_notifications_path(current_user.id)
-    end
+    redirect_to user_notifications_path(current_user.id) if notification.destroy
   end
-
 end
