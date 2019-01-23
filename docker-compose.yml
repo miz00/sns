@@ -1,0 +1,25 @@
+version: 'x'
+
+services:
+	app:
+		depends_on:
+			- db
+		# build : build from Docker
+		# relative path
+		build: "./build/app"
+		ports:
+			- "80:80"
+		volums:
+			- "xxx"
+		links:
+			- db
+	
+	db:
+		image: mysql
+		emvironment:
+			MYSQL_ROOT_PASSWORD: root
+			MYSQL_DATABASE: database
+		ports:
+			- "xxxx:xxx"	# need to be changed
+		
+
