@@ -79,3 +79,6 @@ end
 
 # Install Shrine
 gem "shrine", github: 'janko-m/shrine'
+
+# Install Unicorn
+gem 'unicorn'

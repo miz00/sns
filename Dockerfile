@@ -12,3 +12,4 @@ COPY Gemfile.lock /Gemfile.lock
 RUN bundle install 
 	
 COPY . ~/sns
+CMD ['rails s']
